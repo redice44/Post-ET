@@ -1,0 +1,22 @@
+{
+  "name": "bb-lti",
+  "version": "0.0.0",
+  "description": "LTI for Blackboard's Inaugural Hackathon",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "dev": "webpack --config webpack.config.js --watch",
+    "start": "nodemon ./server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matt Thomson <red.cataclysm@gmail.com>",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "express": "^4.15.3",
+    "superagent": "^3.5.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0",
+    "webpack": "^2.6.1"
+  }
+}
