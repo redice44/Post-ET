@@ -2,10 +2,14 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const request = require('superagent');
-const private = require('../private/index.js');
+const bodyParser = require('body-parser');
 
+const private = require('../private/index.js');
 const appPort = 14159;
 let token = null;
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('*', (req, res, next) => {
   console.log('Checking token');
@@ -23,8 +27,121 @@ app.get('*', (req, res, next) => {
   } else {
     next();
   }
-})
+});
 
+app.all('*', (req, res, next) => {
+  console.log(`[${req.method}] ${req.path}`);
+  next();
+});
+
+app.post('/', (req, res) => {  
+  console.log('body');
+  console.log(req.body);
+
+  console.log('params');
+  console.log(req.params);
+
+  console.log('query');
+  console.log(req.query);
+
+  console.log('cookies');
+  console.log(req.cookies);
+
+  console.log('headers');
+  console.log(req.headers);
+
+  if (!isLTILaunch(req.body)) {
+    res.status(400).send('Bad Request');
+  }
+
+
+  isValidLTI(req.body);
+
+  res.sendFile(path.resolve(__dirname, 'test.html'));
+});
+
+function isLTILaunch (params) {
+  console.log('Is LTI Launch Request?');
+
+  if (!params.lti_message_type || params.lti_message_type !== 'basic-lti-launch-request') {
+    console.log('Missing or Invalid lti_message_type');
+    return false;
+  }
+
+  if (!params.lti_version || params.lti_version !== 'LTI-1p0') {
+    console.log('Missing or Invalid lti_version');
+    return false;
+  }
+
+  // TODO: Later check to see if it's a valid key in DB
+  if (!params.oauth_consumer_key || params.oauth_consumer_key !== 'key') {
+    console.log('Missing or Invalid oauth_consumer_key');
+    return false;
+  }
+  
+  if (!params.resource_link_id) {
+    console.log('Missing resource_link_id');
+    return false;
+  }
+
+  console.log('Valid');
+  console.log(`lti_message_type: ${params.lti_message_type}`);
+  console.log(`lti_version: ${params.lti_version}`);
+  console.log(`oauth_consumer_key: ${params.oauth_consumer_key}`);
+  console.log(`resource_link_id: ${params.resource_link_id}`);
+
+  return true;
+}
+
+function isValidLTI (params) {
+  console.log('Is Valid LTI Request?');
+
+  if (!params.oauth_callback || params.oauth_callback !== 'about:blank') {
+    console.log('Missing or Invalid oauth_callback');
+    return false;
+  }
+
+  // TODO: Later check to see if it's a valid key in DB
+  if (!params.oauth_consumer_key || params.oauth_consumer_key !== 'key') {
+    console.log('Missing or Invalid oauth_consumer_key');
+    return false;
+  }
+
+  if (!params.oauth_nonce) {
+    console.log('Missing oauth nonce');
+    return false;
+  }
+
+  if (!params.oauth_signature) {
+    console.log('Missing oauth signature');
+    return false;
+  }
+
+  if (!params.oauth_signature_method || params.oauth_signature_method !== 'HMAC-SHA1') {
+    console.log('Missing or Invalid oauth_signature_method');
+    return false;
+  }
+
+  if (!params.oauth_timestamp) {
+    console.log('Missing oauth_timestamp');
+    return false;
+  }
+
+  if (!params.oauth_version || params.oauth_version !== '1.0') {
+    console.log('Missing or Invalid oauth_version');
+    return false;
+  }
+
+  console.log('Valid');
+  console.log(`oauth_callback: ${params.oauth_callback}`);
+  console.log(`oauth_consumer_key: ${params.oauth_consumer_key}`);
+  console.log(`oauth_nonce: ${params.oauth_nonce}`);
+  console.log(`oauth_signature: ${params.oauth_signature}`);
+  console.log(`oauth_signature_method: ${params.oauth_signature_method}`);
+  console.log(`oauth_timestamp: ${params.oauth_timestamp}`);
+  console.log(`oauth_version: ${params.oauth_version}`);
+  return true;
+}
 
 app.get('/', (req, res) => {
   res.send('Hello');
