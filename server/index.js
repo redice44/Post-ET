@@ -3,6 +3,7 @@ const app = express();
 const path = require('path');
 const request = require('superagent');
 const bodyParser = require('body-parser');
+const oauthSignature = require('oauth-signature');
 
 const private = require('../private/index.js');
 const appPort = 14159;
@@ -34,6 +35,11 @@ app.all('*', (req, res, next) => {
   next();
 });
 
+app.get('/handle_blackboard_callback', (req, res) => {
+  console.log(req.query);
+  res.end(JSON.stringify(req.query, null, 2));
+});
+
 app.post('/', (req, res) => {  
   console.log('body');
   console.log(req.body);
@@ -50,12 +56,10 @@ app.post('/', (req, res) => {
   console.log('headers');
   console.log(req.headers);
 
-  if (!isLTILaunch(req.body)) {
+  if (!isLTILaunch(req.body) || !isValidLTI(req.body)) {
     res.status(400).send('Bad Request');
   }
 
-
-  isValidLTI(req.body);
 
   res.sendFile(path.resolve(__dirname, 'test.html'));
 });
@@ -132,6 +136,20 @@ function isValidLTI (params) {
     return false;
   }
 
+
+
+  let consumerSecret = 'secret';
+
+  let method = 'POST';
+  // let urls = ['http://www.bb-lti.com/', 'http://www.bb-lti.com', 'www.bb-lti.com/', 'www.bb-lti.com'];
+  let url = 'http://www.bb-lti.com/';
+  let parameters = Object.assign({}, params);
+  delete parameters.oauth_signature
+  let sig = oauthSignature.generate(method, url, parameters, consumerSecret, '', { encodeSignature: false });
+  if (sig !== params.oauth_signature) {
+    console.log('Invalid oauth 1.0 signature');
+    return false;
+  }
   console.log('Valid');
   console.log(`oauth_callback: ${params.oauth_callback}`);
   console.log(`oauth_consumer_key: ${params.oauth_consumer_key}`);
@@ -140,6 +158,7 @@ function isValidLTI (params) {
   console.log(`oauth_signature_method: ${params.oauth_signature_method}`);
   console.log(`oauth_timestamp: ${params.oauth_timestamp}`);
   console.log(`oauth_version: ${params.oauth_version}`);
+
   return true;
 }
 
