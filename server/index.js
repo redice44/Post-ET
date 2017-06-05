@@ -4,6 +4,7 @@ const path = require('path');
 const request = require('superagent');
 const bodyParser = require('body-parser');
 const oauthSignature = require('oauth-signature');
+const mongoose = require('mongoose');
 
 const ltiRoutes = require('./routes/lti');
 const instructorRoutes = require('./routes/instructor');
@@ -155,6 +156,16 @@ app.get('/users', (req, res) => {
     });
 });
 
+mongoose.connect(private.dburi);
+let db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', () => {
+  app.listen(appPort, () => {
+    console.log(`Listening on port ${appPort}`);
+  });
+});
+
 function getToken () {
   return new Promise((resolve, reject) => {
     const url = 'http://localhost:9876/learn/api/public/v1/oauth2/token';
@@ -178,6 +189,3 @@ function getToken () {
   })
 }
 
-app.listen(appPort, () => {
-  console.log(`Listening on port ${appPort}`);
-});
