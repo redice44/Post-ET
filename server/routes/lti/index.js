@@ -14,8 +14,8 @@ router.post('/launch', (req, res) => {
   }
 
   let role = getUserRole(req.body);
-  // Hash Environment ID, Course ID, Content ID, User ID
-  const userHash = hashSHA256(`${req.body.tool_consumer_instance_guid}${req.body.context_id}${req.body.resource_link_id}${req.body.user_id}`);
+  // Hash Environment ID, Course ID, User ID
+  const userHash = hashSHA256(`${req.body.tool_consumer_instance_guid}${req.body.context_id}${req.body.user_id}`);
   // Hash Environment ID, Course ID, Content ID
   const assignmentHash = hashSHA256(`${req.body.tool_consumer_instance_guid}${req.body.context_id}${req.body.resource_link_id}`);
   let redirectUrl = '';
@@ -34,6 +34,7 @@ router.post('/launch', (req, res) => {
   userAPI.getOrCreate(userHash, role)
     .then((user) => {
       req.session.assignmentId = assignmentHash;
+      req.session.assignmentName = req.body.resource_link_title;
       req.session.userId = user.ID;
       return res.redirect(redirectUrl);
     })

@@ -1,0 +1,2 @@
+require('./assignment');
+require('./user');

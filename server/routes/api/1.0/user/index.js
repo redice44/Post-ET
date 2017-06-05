@@ -3,20 +3,20 @@ const mongoose = require('mongoose');
 /* Model */
 const User = mongoose.model('User');
 
-function get(userId) {
+function get (userId) {
   const q = {
     ID: userId
   };
 
   return User.findOne(q);
-};
+}
 
-function create(userData) {
+function create (userData) {
   const user = new User(userData);
   return user.save();
-};
+}
 
-function getOrCreate(userHash, role) {
+function getOrCreate (userHash, role) {
   return new Promise((resolve, reject) => {
     get(userHash)
       .then((user) => {
@@ -53,7 +53,7 @@ function getOrCreate(userHash, role) {
         // return res.status(500).json({ err: err });
       });
   });
-};
+}
 
 exports.get = get;
 exports.create = create;

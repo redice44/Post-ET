@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 
 /* Initialize Models */
-require('./models/user');
+require('./models');
 
 const ltiRoutes = require('./routes/lti');
 const instructorRoutes = require('./routes/instructor');
@@ -18,6 +18,9 @@ const apiRoutes = require('./routes/api/1.0');
 const private = require('../private/index.js');
 const appPort = 14159;
 let token = null;
+
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
 
 app.use(session({
   secret: private.sessionSecret,
