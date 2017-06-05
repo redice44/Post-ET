@@ -5,6 +5,10 @@ const request = require('superagent');
 const bodyParser = require('body-parser');
 const oauthSignature = require('oauth-signature');
 const mongoose = require('mongoose');
+const session = require('express-session');
+
+/* Initialize Models */
+require('./models/user');
 
 const ltiRoutes = require('./routes/lti');
 const instructorRoutes = require('./routes/instructor');
@@ -14,6 +18,11 @@ const apiRoutes = require('./routes/api/1.0');
 const private = require('../private/index.js');
 const appPort = 14159;
 let token = null;
+
+app.use(session({
+  secret: private.sessionSecret,
+  resave: false
+}));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -155,6 +164,8 @@ app.get('/users', (req, res) => {
       res.send(json);
     });
 });
+
+mongoose.Promise = global.Promise;
 
 mongoose.connect(private.dburi);
 let db = mongoose.connection;

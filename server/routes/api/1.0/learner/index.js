@@ -1,8 +1,17 @@
-const express = require('express');
-const router = express.Router();
+const mongoose = require('mongoose');
 
-router.get('/', (req, res) => {
-  res.send('API Learner');
-});
+/* Model */
+const User = mongoose.model('User');
 
-module.exports = router;
+exports.get = function (userId, done) {
+  const q = {
+    ID: userId
+  };
+
+  return User.findOne(q);
+};
+
+exports.create = function (userData, done) {
+  const user = new User(userData);
+  return user.save();
+};
