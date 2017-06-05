@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const validateLTI = require('./validateLTI');
 const getUserRole = require('./userRole');
 
-const userAPI = require('../api/1.0/learner');
+const userAPI = require('../api/1.0/user');
 
 router.post('/launch', (req, res) => {
   if (!validateLTI(req.body)) {
@@ -14,52 +14,38 @@ router.post('/launch', (req, res) => {
   }
 
   let role = getUserRole(req.body);
-
+  // Hash Environment ID, Course ID, Content ID, User ID
+  const userHash = hashSHA256(`${req.body.tool_consumer_instance_guid}${req.body.context_id}${req.body.resource_link_id}${req.body.user_id}`);
+  // Hash Environment ID, Course ID, Content ID
+  const assignmentHash = hashSHA256(`${req.body.tool_consumer_instance_guid}${req.body.context_id}${req.body.resource_link_id}`);
+  let redirectUrl = '';
+  
   switch (role) {
     case 'Instructor':
-      res.redirect('/instructor');
+      redirectUrl = '/instructor';
       break;
     case 'Learner':
-      const userHash = genUserId(req.body.tool_consumer_instance_guid, req.body.context_id, req.body.user_id);
-      userAPI.get(userHash)
-        .then((user) => {
-          if (!user) {
-            console.log('Creating new user');
-            const userData = {
-              ID: userHash,
-              role: role
-            };
-            userAPI.create(userData)
-              .then((doc) => {
-                console.log(doc);
-                req.session.userId = doc.ID;
-                return res.redirect('/learner');
-              })
-              .catch((err) => {
-                console.log(err);
-                return res.status(500).json({ err: err });
-              });
-          } else {
-            console.log(user);
-            req.session.userId = user.ID;
-            return res.redirect('/learner');
-          }
-
-        })
-        .catch((err) => {
-          console.log(err);
-          return res.status(500).json({ err: err });
-        });
+      redirectUrl = '/learner';
       break;
     default:
       res.send(`Unsupported role: ${role}`);
   }
-  // res.sendFile(path.resolve(__dirname, '../../test.html'));
+
+  userAPI.getOrCreate(userHash, role)
+    .then((user) => {
+      req.session.assignmentId = assignmentHash;
+      req.session.userId = user.ID;
+      return res.redirect(redirectUrl);
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).send(err);
+    });
 });
 
-function genUserId (envId, contextId, userId) {
+function hashSHA256 (str) {
   const hash = crypto.createHash('sha256');
-  hash.update(`${envId}${contextId}${userId}`);
+  hash.update(str);
   const sha256 = hash.digest('base64');
   console.log(sha256);
   return sha256;

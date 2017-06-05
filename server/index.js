@@ -21,7 +21,8 @@ let token = null;
 
 app.use(session({
   secret: private.sessionSecret,
-  resave: false
+  resave: false,
+  saveUninitialized: true  
 }));
 
 app.use(bodyParser.json());
