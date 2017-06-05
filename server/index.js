@@ -6,6 +6,9 @@ const bodyParser = require('body-parser');
 const oauthSignature = require('oauth-signature');
 
 const ltiRoutes = require('./routes/lti');
+const instructorRoutes = require('./routes/instructor');
+const learnerRoutes = require('./routes/learner');
+const apiRoutes = require('./routes/api/1.0');
 
 const private = require('../private/index.js');
 const appPort = 14159;
@@ -20,6 +23,9 @@ app.all('*', (req, res, next) => {
 });
 
 app.use('/lti', ltiRoutes);
+app.use('/learner', learnerRoutes);
+app.use('/instructor', instructorRoutes);
+app.use('/api/1.0/', apiRoutes);
 
 app.get('*', (req, res, next) => {
   console.log('Checking token');
