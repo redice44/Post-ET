@@ -30,11 +30,11 @@ function isLaunchRequest (params) {
     return false;
   }
 
-  console.log('Valid');
-  console.log(`lti_message_type: ${params.lti_message_type}`);
-  console.log(`lti_version: ${params.lti_version}`);
-  console.log(`oauth_consumer_key: ${params.oauth_consumer_key}`);
-  console.log(`resource_link_id: ${params.resource_link_id}`);
+  // console.log('Valid');
+  // console.log(`lti_message_type: ${params.lti_message_type}`);
+  // console.log(`lti_version: ${params.lti_version}`);
+  // console.log(`oauth_consumer_key: ${params.oauth_consumer_key}`);
+  // console.log(`resource_link_id: ${params.resource_link_id}`);
 
   return true;
 }
@@ -89,14 +89,14 @@ function isValidLTI (params) {
     console.log('Invalid oauth 1.0 signature');
     return false;
   }
-  console.log(`oauth_callback: ${params.oauth_callback}`);
-  console.log(`oauth_consumer_key: ${params.oauth_consumer_key}`);
-  console.log(`oauth_nonce: ${params.oauth_nonce}`);
-  console.log(`oauth_signature: ${params.oauth_signature}`);
-  console.log(`oauth_signature_method: ${params.oauth_signature_method}`);
-  console.log(`oauth_timestamp: ${params.oauth_timestamp}`);
-  console.log(`oauth_version: ${params.oauth_version}`);
-  console.log('Valid oauth signature');
+  // console.log(`oauth_callback: ${params.oauth_callback}`);
+  // console.log(`oauth_consumer_key: ${params.oauth_consumer_key}`);
+  // console.log(`oauth_nonce: ${params.oauth_nonce}`);
+  // console.log(`oauth_signature: ${params.oauth_signature}`);
+  // console.log(`oauth_signature_method: ${params.oauth_signature_method}`);
+  // console.log(`oauth_timestamp: ${params.oauth_timestamp}`);
+  // console.log(`oauth_version: ${params.oauth_version}`);
+  // console.log('Valid oauth signature');
 
   return true;
 }
@@ -105,7 +105,7 @@ function isValidTimestamp (timestamp) {
   const validRange = 60; // Seconds range +/- 
   const diff = Math.abs(timestamp - Math.floor(Date.now() / 1000));
 
-  console.log(`Difference: ${diff} | Range: ${validRange}`);
+  // console.log(`Difference: ${diff} | Range: ${validRange}`);
 
   return diff <= validRange;
 }
