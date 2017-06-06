@@ -16,41 +16,27 @@ function create (userData) {
   return user.save();
 }
 
-function getOrCreate (userHash, role) {
+function getOrCreate (userHash, userData) {
   return new Promise((resolve, reject) => {
     get(userHash)
       .then((user) => {
         if (!user) {
           console.log('Creating new user');
-          const userData = {
-            ID: userHash,
-            role: role
-          };
           create(userData)
             .then((doc) => {
               return resolve(doc);
-              // console.log(doc);
-              // req.session.userId = doc.ID;
-              // return res.redirect('/learner');
             })
             .catch((err) => {
               console.log(err);
               return reject(err);
-              // console.log(err);
-              // return res.status(500).json({ err: err });
             });
         } else {
           return resolve(user);
-          // console.log(user);
-          // req.session.userId = user.ID;
-          // return res.redirect('/learner');
         }
       })
       .catch((err) => {
         console.log(err);
         return reject(err);
-        // console.log(err);
-        // return res.status(500).json({ err: err });
       });
   });
 }
