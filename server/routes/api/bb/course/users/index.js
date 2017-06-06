@@ -25,4 +25,23 @@ function get (courseId) {
   });
 }
 
+function getStudents (courseId) {
+  return new Promise((resolve, reject) => {
+    get(courseId)
+      .then((students) => {
+        return resolve(filterStudents(students.results));
+      })
+      .catch((err) => {
+        return reject(err);
+      })
+  })
+}
+
+function filterStudents (users) {
+  return users.filter((user) => {
+    return user.courseRoleId === 'Student';
+  });
+}
+
 exports.get = get;
+exports.getStudents = getStudents;

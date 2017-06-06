@@ -6,7 +6,6 @@ const securityUtil = require('../../util/security');
 const validateLTI = require('./validateLTI');
 const getUserRole = require('./userRole');
 
-
 const assignmentAPI = require('../api/1.0/assignment');
 const userAPI = require('../api/1.0/user');
 
@@ -22,12 +21,13 @@ router.post('/launch', (req, res) => {
   req.session.courseId = req.body.context_label;
   req.session.contentId = req.body.resource_link_id;
   req.session.assignmentName = req.body.resource_link_title;
+  req.session.userId = req.body.lis_person_sourcedid;
   // Hash Environment ID, Course ID, User ID
   const userHash = securityUtil.hashUser(req.session);
   // Hash Environment ID, Course ID, Content ID
   const assignmentHash = securityUtil.hashAssignment(req.session);
-  req.session.assignmentId = assignmentHash;
-  req.session.userId = userHash;
+  // req.session.assignmentId = assignmentHash;
+  // req.session.userId = userHash;
   req.session.role = role;
   let redirectUrl = '';
 
@@ -45,11 +45,13 @@ router.post('/launch', (req, res) => {
   let userData = {
     ID: userHash,
     role: role,
+    envUserId: req.body.lis_person_sourcedid,
+    name: req.body.lis_person_name_full
   };
 
-  userAPI.getOrCreate(userHash, userData)
+  userAPI.getOrCreate({ ID: userHash }, userData)
     .then((user) => {
-      assignmentAPI.get(assignmentHash)
+      assignmentAPI.findOne({ ID: assignmentHash})
         .then((assignment) => {
           if (!assignment) {
             return res.redirect(`${redirectUrl}/${req.session.courseId}${req.session.contentId}/create`);

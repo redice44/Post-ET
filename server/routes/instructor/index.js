@@ -10,29 +10,139 @@ const securityUtil = require('../../util/security');
 
 router.all('*', roleAuth.isInstructor);
 
-// router.get('/', (req, res) => {
-
-
-//   const locals = {
-//     assignmentName: req.session.assignmentName,
-//     assignmentId: req.session.assignmentId
-//   };
-
-//   getCourseStudents(req.session.courseId);
-//     .then((students) => {
-
-//     })
-//     .catch((err) => {
-
-//     });
-// });
+router.get('/', (req, res) => {
+  res.render('instructor/dash');
+});
 
 router.get('/:asId', (req, res) => {
   let locals = {
     assignmentName: req.session.assignmentName
   };
 
-  res.render('instructor/show', locals);
+  let assignmentHash = securityUtil.hashAssignment({
+    envId: req.session.envId,
+    courseId: req.params.asId,
+    contentId: ''
+  });
+
+  assignmentAPI.findOne({ ID: assignmentHash})
+    .then((assignment) => {
+      userAPI.find({
+        ID: { $in: assignment.learners }
+      })
+        .then((learners) => {
+          // res.send(learners);
+          locals.learners = learners;
+          return res.render('instructor/show', locals);
+        })
+        .catch((err) => {
+          console.log(err);
+          return res.status(500).send(err);
+        })
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).send(err);
+    });
+
+
+  // bbAPI.course.users.getStudents(req.session.courseId)
+  //   .then((students) => {
+  //     console.log('Received students in course');
+  //     console.log(students);
+  //     let studentsHash = students.map((student) => {
+  //       let hashString = {
+  //         envId: req.session.envId,
+  //         courseId: req.session.courseId,
+  //         userId: student.userId
+  //       };
+  //       return { ID: securityUtil.hashUser(hashString) };
+  //     });
+
+  //     let studentsData = students.map((student, i) => {
+  //       return {
+  //         ID: studentsHash[i].ID,
+  //         role: student.courseRoleId,
+  //         envUserId: student.userId
+  //       };
+  //     });
+
+  //     console.log('student hash');
+  //     console.log(studentsHash);
+  //     console.log('\nstudent data');
+  //     console.log(studentsData);
+
+  //     userAPI.updateUsers(studentsHash, studentsData)
+  //       .then((updatedStudents) => {
+  //         console.log('Updated students');
+  //         console.log(updatedStudents);
+  //         // could be empty I think
+  //         let unnamedStudents = updatedStudents.filter((student) => {
+  //           return !student.name;
+  //         });
+
+  //         console.log('unnamed students');
+  //         console.log(unnamedStudents);
+
+  //         if (unnamedStudents.length === 0) {
+  //           // done return some page thing
+  //           return res.send('quick exit');
+  //         }
+
+  //         let promises = unnamedStudents.map((student) => {
+  //           return bbAPI.users.getUser(student.envUserId);
+  //         });
+
+  //         Promise.all(promises)
+  //           .then((students) => {
+  //             console.log('All student data');
+  //             console.log(students);
+  //             studentsHash = students.map((student) => {
+  //               let hashString = {
+  //                 envId: req.session.envId,
+  //                 courseId: req.session.courseId,
+  //                 userId: student.id
+  //               };
+  //               return { ID: securityUtil.hashUser(hashString) };
+  //             });
+
+  //             studentsData = students.map((student, i) => {
+  //               return {
+  //                 ID: studentsHash[i].ID,
+  //                 // role: student.courseRoleId,
+  //                 // envUserId: student.userId,
+  //                 name: `${student.name.given} ${student.name.family}`
+  //               };
+  //             });
+
+  //             userAPI.updateUsers(studentsHash, studentsData)
+  //               .then((updatedStudents) => {
+  //                 // then get all the students and send to view
+  //                 console.log('all updated students');
+  //                 console.log(updatedStudents);
+  //                 return res.send('yup');
+  //               })
+  //               .catch((err) => {
+  //                 console.log(err);
+  //                 return res.status(500).send(err);
+  //               });
+  //           })
+  //           .catch((err) => {
+  //             console.log(err);
+  //             return res.status(500).send(err);
+  //           });
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //         return res.status(500).send(err);
+  //       });
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //     return res.status(500).send(err);
+  //   });
+
+  // res.render('instructor/show', locals);
 });
 
 router.get('/:asId/create', (req, res) => {
@@ -44,23 +154,6 @@ router.get('/:asId/create', (req, res) => {
   res.render('instructor/create', locals);
 });
 
-function getCourseStudents (courseId) {
-  return new Promise((resolve, reject) => {
-    bbAPI.course.users.get(courseId)
-      .then((users) => {
-        return resolve(filterStudents(users));
-      })
-      .catch((err) => {
-        return reject(err);
-      });
-  });
-}
-
-function filterStudents (users) {
-  return users.filter((user) => {
-    return user.courseRoleId === 'Student';
-  });
-}
 //     .then((users) => {
 //       console.log(users);
 //       locals.students = getStudents(users.results);
@@ -95,11 +188,5 @@ function filterStudents (users) {
 //       return res.status(500).send(err);
 //     });
 // }
-
-function getStudents (users) {
-  return users.filter((user) => {
-    return user.courseRoleId === 'Student';
-  });
-}
 
 module.exports = router;

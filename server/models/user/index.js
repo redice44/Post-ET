@@ -3,7 +3,9 @@ const Schema = mongoose.Schema;
 
 let userSchema = new Schema({
   ID: String,
-  role: String
+  role: String,
+  envUserId: String,
+  name: String
 });
 
 mongoose.model('User', userSchema);
