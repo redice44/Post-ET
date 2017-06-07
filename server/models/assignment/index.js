@@ -5,6 +5,8 @@ let assignmentSchema = new Schema({
   ID: String,
   name: String,
   courseId: String,
+  contentId: String,
+  columnId: String,
   learners: [String]
 });
 

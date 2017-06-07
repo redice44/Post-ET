@@ -1,7 +1,6 @@
-const request = require('superagent');
-// const private = require('../../../../../private');
+const course = {
+  grades: require('./grades'),
+  users: require('./users')
+};
 
-const domain = 'http://localhost:9876';
-const courseEndpoint = '/learn/api/public/v1/courses';
-
-exports.users = require('./users');
+module.exports = course;

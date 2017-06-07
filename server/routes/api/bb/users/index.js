@@ -13,17 +13,16 @@ function getUser (userId) {
           .set('Authorization', `Bearer ${token}`)
           .end((err, asyncRes) => {
             if (err || asyncRes.status !== 200) {
-              // console.log(asyncRes);
               return reject(err || asyncRes.status);
             }
 
             return resolve(JSON.parse(asyncRes.text));
           });
+      })
+      .catch((err) => {
+        return reject(err);
       });
-    })
-    .catch((err) => {
-      return reject(err);
-    });
+  });
 }
 
 exports.getUser = getUser;
