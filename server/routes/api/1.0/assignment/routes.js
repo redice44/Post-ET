@@ -76,7 +76,7 @@ router.post('/', (req, res) => {
                   assignmentAPI.getOrCreate({ ID: assignmentData.ID }, assignmentData)
                     .then((as) => {
                       // probably should be .json return of assignment
-                      return res.redirect(`/instructor/${req.session.courseId}${req.session.contentId}/`);
+                      return res.redirect(`/instructor/${assignmentData.ID}/`);
                     })
                     .catch((err) => {
                       console.log(err);
@@ -92,6 +92,28 @@ router.post('/', (req, res) => {
               console.log(err);
               return res.status(500).send(err);
             });
+        })
+        .catch((err) => {
+          console.log(err);
+          return res.status(500).send(err);
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).send(err);
+    });
+});
+
+router.post('/:asId/learner/:lId', (req, res) => {
+  assignmentAPI.findOne({ ID: req.params.asId })
+    .then((assignment) => {
+      let grade = {
+        score: req.body.grade
+      };
+      assignmentAPI.updateGrade(assignment.courseId, assignment.columnId, req.params.lId, grade)
+        .then((updatedGrade) => {
+          // temp just send them back to the assignment page to see the update
+          return res.redirect(`/instructor/${req.params.asId}`);
         })
         .catch((err) => {
           console.log(err);

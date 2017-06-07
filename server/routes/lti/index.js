@@ -54,10 +54,10 @@ router.post('/launch', (req, res) => {
       assignmentAPI.findOne({ ID: assignmentHash})
         .then((assignment) => {
           if (!assignment) {
-            return res.redirect(`${redirectUrl}/${req.session.courseId}${req.session.contentId}/create`);
+            return res.redirect(`${redirectUrl}/${assignmentHash}/create`);
           }
 
-          return res.redirect(`${redirectUrl}/${req.session.courseId}${req.session.contentId}`);
+          return res.redirect(`${redirectUrl}/${assignmentHash}`);
         })
         .catch((err) => {
           console.log(err);

@@ -15,11 +15,8 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:asId', (req, res) => {
-  let assignmentHash = securityUtil.hashAssignment({
-    envId: req.session.envId,
-    courseId: req.params.asId,
-    contentId: ''
-  });
+  let assignmentHash = req.params.asId;
+  console.log(assignmentHash);
 
   assignmentAPI.get(assignmentHash)
     .then((assignment) => {

@@ -49,8 +49,9 @@ function setGrade (courseId, columnId, userId, grade) {
   return new Promise((resolve, reject) => {
     authAPI.getToken()
       .then((token) => {
-        request.patch(`${domain}${gradesEndpoint}externalId:${courseId}/gradebook/columns/${columnId}/users/{userId}`)
+        request.patch(`${domain}${gradesEndpoint}externalId:${courseId}/gradebook/columns/${columnId}/users/${userId}`)
           .set('Authorization', `Bearer ${token}`)
+          .set('Content-Type', 'application/json')
           .send(grade)
           .end((err, asyncRes) => {
             if (err || asyncRes.status !== 200) {

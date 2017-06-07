@@ -3,7 +3,7 @@ const crypto = require('crypto');
 function hashSHA256 (str) {
   const hash = crypto.createHash('sha256');
   hash.update(str);
-  const sha256 = hash.digest('base64');
+  const sha256 = hash.digest('hex');
   return sha256;
 }
 

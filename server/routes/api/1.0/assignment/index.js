@@ -48,44 +48,6 @@ function get (assignmentHash) {
   });
 }
 
-// function create (assignmentData) {
-//   return new Promise((resolve, reject) => {
-//     // Get learners from course
-//     bbAPI.course.users.getStudents(assignmentData.courseId)
-//       .then((learners) => {
-//         let data = assignmentData;
-//         data.learners = learners
-//         // Get gradebook columns
-//         bbAPI.course.grades.getColumns(assignmentData.courseId)
-//           .then((columns) => {
-//             columns = columns.results;
-//             console.log('columns');
-//             console.log(columns);
-//             columns.forEach((column) => {
-//               if (column.contentId && column.contentId === assignmentData.contentId) {
-//                 assignmentData.columnId = column.id;
-//               }
-//             });
-//             return resolve(getOrCreate({ ID: assignmentData.ID }, assignmentData));
-//               // const assignment = new Assignment(data);
-//               // assignment.save()
-//               //   .then((as) => {
-//               //     return resolve(as);
-//               //   })
-//               //   .catch((err) => {
-//               //     return reject(err);
-//               // });
-//           })
-//           .catch((err) => {
-//             return reject(err);
-//           });
-//       })
-//       .catch((err) => {
-//         return reject(err);
-//       });
-//   });
-// }
-
 function getOrCreate (q, assignmentData) {
   const options = {
     new: true,
@@ -107,8 +69,20 @@ function getGrades (courseId, columnId) {
   });
 }
 
+function updateGrade (courseId, columnId, userId, grade) {
+  return new Promise((resolve, reject) => {
+    bbAPI.course.grades.setGrade(courseId, columnId, userId, grade)
+      .then((updatedGrade) => {
+        return resolve(updatedGrade);
+      })
+      .catch((err) => {
+        return reject(err);
+      });
+  });
+}
+
 exports.findOne = findOne;
-// exports.create = create;
 exports.get = get;
 exports.getGrades = getGrades;
 exports.getOrCreate = getOrCreate;
+exports.updateGrade = updateGrade;
