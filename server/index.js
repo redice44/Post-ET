@@ -19,6 +19,8 @@ const private = require('../private/index.js');
 const appPort = 14159;
 let token = null;
 
+app.use(express.static(path.join(__dirname, 'static')));
+
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
