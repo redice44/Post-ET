@@ -2,8 +2,10 @@ doctype html
 html
   head
   body
-    h1= assignmentName
+    h1= assignment.name
     p show students
     ul
-      each learner in learners
-        li= learner.name
+      each learner in assignment.learners
+        li
+          p= learner.name
+          p= learner.grade

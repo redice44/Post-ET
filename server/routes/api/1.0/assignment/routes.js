@@ -11,7 +11,15 @@ router.get('/:assignmentId', (req, res) => {
   assignmentAPI.findOne({ ID: req.params.assignmentId })
     .then((assignment) => {
       // return some display page I guess
-      return res.send(assignment);
+      bbAPI.course.grades.getColumnGrades(assignment.courseId, assignment.columnId)
+        .then((grades) => {
+          console.log(grades);
+          return res.send(grades);
+        })
+        .catch((err) => {
+          console.log(err);
+          return res.status(500).send(err);
+        });
     })
     .catch((err) => {
       console.log(err);
@@ -56,12 +64,10 @@ router.post('/', (req, res) => {
             });
           }))
             .then((students) => {
-              // Get Gradebook Column
+              // Get Gradebook Columns
               bbAPI.course.grades.getColumns(req.session.courseId)
                 .then((columns) => {
                   columns = columns.results;
-                  console.log('columns');
-                  console.log(columns);
                   columns.forEach((column) => {
                     if (column.contentId && column.contentId === assignmentData.contentId) {
                       assignmentData.columnId = column.id;
@@ -81,8 +87,6 @@ router.post('/', (req, res) => {
                   console.log(err);
                   return res.status(500).send(err);
                 });
-
-
             })
             .catch((err) => {
               console.log(err);

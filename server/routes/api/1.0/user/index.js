@@ -4,11 +4,11 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 
 function findOne (q) {
-  return User.findOne(q);
+  return User.findOne(q).exec();
 }
 
 function find (q) {
-  return User.find(q);
+  return User.find(q).exec();
 }
 
 function create (userData) {
@@ -34,8 +34,6 @@ function updateUsers (queries, users) {
     return getOrCreate(queries[i], user);
   });
 
-  // console.log(promises);
-  // return promises;
   return Promise.all(promises);
 }
 

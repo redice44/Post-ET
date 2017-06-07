@@ -15,44 +15,25 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:asId', (req, res) => {
-  let locals = {
-    assignmentName: req.session.assignmentName
-  };
-
   let assignmentHash = securityUtil.hashAssignment({
     envId: req.session.envId,
     courseId: req.params.asId,
     contentId: ''
   });
 
-  bbAPI.course.grades.getColumns(req.session.courseId)
-    .then((columns) => {
-      return res.send(columns);
+  assignmentAPI.get(assignmentHash)
+    .then((assignment) => {
+      let locals = {
+        assignment: assignment
+      };
+      console.log('get assignment');
+      console.log(assignment);
+      return res.render('instructor/show', locals);
     })
     .catch((err) => {
       console.log(err);
       return res.status(500).send(err);
     });
-
-  // assignmentAPI.findOne({ ID: assignmentHash})
-  //   .then((assignment) => {
-  //     userAPI.find({
-  //       ID: { $in: assignment.learners }
-  //     })
-  //       .then((learners) => {
-  //         locals.learners = learners;
-  //         return res.render('instructor/show', locals);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //         return res.status(500).send(err);
-  //       })
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //     return res.status(500).send(err);
-  //   });
-
 });
 
 router.get('/:asId/create', (req, res) => {

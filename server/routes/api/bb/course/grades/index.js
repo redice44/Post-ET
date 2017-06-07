@@ -25,6 +25,26 @@ function getColumns (courseId) {
   });
 }
 
+function getColumnGrades (courseId, columnId) {
+  return new Promise((resolve, reject) => {
+    authAPI.getToken()
+      .then((token) => {
+        request.get(`${domain}${gradesEndpoint}externalId:${courseId}/gradebook/columns/${columnId}/users`)
+          .set('Authorization', `Bearer ${token}`)
+          .end((err, asyncRes) => {
+            if (err || asyncRes.status !== 200) {
+              return reject(err || asyncRes.status);
+            }
+
+            return resolve(JSON.parse(asyncRes.text));
+          });
+      })
+      .catch((err) => {
+        return reject(err);
+      });
+  });
+}
+
 function setGrade (courseId, columnId, userId, grade) {
   return new Promise((resolve, reject) => {
     authAPI.getToken()
@@ -47,4 +67,5 @@ function setGrade (courseId, columnId, userId, grade) {
 }
 
 exports.getColumns = getColumns;
+exports.getColumnGrades = getColumnGrades;
 exports.setGrade = setGrade;

@@ -13,7 +13,7 @@ function getToken () {
       .send({ grant_type: 'client_credentials'})
       .end((err, asyncRes) => {
         if (err || asyncRes.status !== 200) {
-          return reject(`Error code ${asyncRes.status}`);
+          return reject(err);
         }
 
         return resolve(JSON.parse(asyncRes.text).access_token);
