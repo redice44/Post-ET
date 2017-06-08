@@ -9,6 +9,7 @@ function getColumns (courseId) {
   return new Promise((resolve, reject) => {
     authAPI.getToken()
       .then((token) => {
+        console.log(`-> BB [GET]: ${domain}${gradesEndpoint}externalId:${courseId}/gradebook/columns`);
         request.get(`${domain}${gradesEndpoint}externalId:${courseId}/gradebook/columns`)
           .set('Authorization', `Bearer ${token}`)
           .end((err, asyncRes) => {
@@ -29,6 +30,7 @@ function getColumnGrades (courseId, columnId) {
   return new Promise((resolve, reject) => {
     authAPI.getToken()
       .then((token) => {
+        console.log(`-> BB [GET]: ${domain}${gradesEndpoint}externalId:${courseId}/gradebook/columns/${columnId}/users`);
         request.get(`${domain}${gradesEndpoint}externalId:${courseId}/gradebook/columns/${columnId}/users`)
           .set('Authorization', `Bearer ${token}`)
           .end((err, asyncRes) => {
@@ -49,6 +51,7 @@ function setGrade (courseId, columnId, userId, grade) {
   return new Promise((resolve, reject) => {
     authAPI.getToken()
       .then((token) => {
+        console.log(`-> BB [PATCH]: ${domain}${gradesEndpoint}externalId:${courseId}/gradebook/columns/${columnId}/users/${userId}`);
         request.patch(`${domain}${gradesEndpoint}externalId:${courseId}/gradebook/columns/${columnId}/users/${userId}`)
           .set('Authorization', `Bearer ${token}`)
           .set('Content-Type', 'application/json')

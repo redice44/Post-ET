@@ -9,6 +9,7 @@ function get (courseId) {
   return new Promise((resolve, reject) => {
     authAPI.getToken()
       .then((token) => {
+        console.log(`-> BB [GET]: ${domain}${courseEndpoint}externalId:${courseId}/users`);
         request.get(`${domain}${courseEndpoint}externalId:${courseId}/users`)
           .set('Authorization', `Bearer ${token}`)
           .end((err, asyncRes) => {

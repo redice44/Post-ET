@@ -9,6 +9,7 @@ function getUser (userId) {
   return new Promise((resolve, reject) => {
     authAPI.getToken()
       .then((token) => {
+        console.log(`-> BB [GET]: ${domain}${userEndpoint}${userId}`);
         request.get(`${domain}${userEndpoint}${userId}`)
           .set('Authorization', `Bearer ${token}`)
           .end((err, asyncRes) => {
