@@ -7,7 +7,7 @@ const userAPI = require('../user');
 const Assignment = mongoose.model('Assignment');
 
 function findOne (q) {
-  return Assignment.findOne(q);
+  return Assignment.findOne(q).exec();
 }
 
 function get (assignmentHash) {
@@ -21,22 +21,24 @@ function get (assignmentHash) {
             assignment.learners = [];
             learners.forEach((learner) => {
               assignment.learners.push(learner.toJSON());
-            }); 
-            getGrades(assignment.courseId, assignment.columnId)
-              .then((grades) => {
-                grades.results.forEach((grade) => {
-                  assignment.learners.forEach((learner) => {
-                    if (learner.envUserId === grade.userId) {
-                      learner.grade = grade.score;
-                    }
+            });
+            if (assignment.columnId) {
+              getGrades(assignment.courseId, assignment.columnId)
+                .then((grades) => {
+                  grades.results.forEach((grade) => {
+                    assignment.learners.forEach((learner) => {
+                      if (learner.envUserId === grade.userId) {
+                        learner.grade = grade.score;
+                      }
+                    });
                   });
+                  return resolve(assignment);
+                })
+                .catch((err) => {
+                  return reject(err);
                 });
-
-                return resolve(assignment);
-              })
-              .catch((err) => {
-                return reject(err);
-              });
+            }
+            return resolve(assignment);
           })
           .catch((err) => {
             return reject(err);
@@ -55,6 +57,30 @@ function getOrCreate (q, assignmentData) {
   };
 
   return Assignment.findOneAndUpdate(q, { $set: assignmentData }, options).exec();
+}
+
+// Only allow name, description, and learners to be updated.
+function update (assignmentHash, assignmentData) {
+  return new Promise((resolve, reject) => {
+    get({ ID: assignmentHash })
+      .then((assignment) => {
+        assignment.name = assignmentData.name || assignment.name;
+        assignment.description = assignmentData.description || assignment.description;
+        assignment.learners = assignmentData.learners || assignment.learners;
+
+        assignment.save()
+          .then((as) => {
+            return resolve(as);
+          })
+          .catch((err) => {
+            return reject(err);
+          });
+      })
+      .catch((err) => {
+        return reject(err);
+      });
+    
+  });
 }
 
 function getGrades (courseId, columnId) {

@@ -9,14 +9,16 @@ html
       thead
         tr
           td Student Name
-          td Grade
-          td Set Grade
+          if assignment.columnId
+            td Grade
+            td Set Grade
       tbody
         each learner in assignment.learners
           tr
             td= learner.name
-            td= learner.grade
-            td
-              form(action='/api/1.0/assignment/' + assignment.ID + '/learner/' + learner.envUserId, method="POST")
-                input(type='number', name='grade', placeholder='Grade')
-                input(type='submit', value='Update')
+            if assignment.columnId
+              td= learner.grade
+              td
+                form(action='/api/1.0/assignment/' + assignment.ID + '/learner/' + learner.envUserId, method="POST")
+                  input(type='number', name='grade', placeholder='Grade')
+                  input(type='submit', value='Update')
