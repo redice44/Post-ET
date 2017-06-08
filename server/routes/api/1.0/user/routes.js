@@ -16,6 +16,19 @@ router.get('/:userId', (req, res) => {
     });
 });
 
+router.post('/:userId/as/:asId', (req, res) => {
+  userAPI.submit(req.params.userId, req.params.asId, req.body.submission)
+    .then((user) => {
+      console.log('after submit user');
+      console.log(user);
+      return res.redirect(`/instructor/as/${req.params.asId}/`);
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).send(err);
+    });
+});
+
 router.post('/', (req, res) => {
   const userData = {
     ID: req.body.userId,

@@ -15,6 +15,8 @@ html
       thead
         tr
           td Student Name
+          td temp submit
+          td Submission
           if assignment.graded
             td Grade
             td Set Grade
@@ -22,9 +24,16 @@ html
         each learner in assignment.learners
           tr
             td= learner.name
+            td
+              form(action='/api/1.0/user/' + learner.ID + '/as/' + assignment.ID, method="POST")
+                input(type='text', name='submission', placeholder='Post Info')
+                input(type='submit', value='Post')
+            td
+              if learner.post
+                p= learner.post
             if assignment.graded
               td= learner.grade
               td
                 form(action='/api/1.0/assignment/' + assignment.ID + '/learner/' + learner.envUserId, method="POST")
-                  input(type='number', name='grade', placeholder='Grade')
+                  input(type='number', name='grade', placeholder='Grade', min=0, max=assignment.graded.maxPoints)
                   input(type='submit', value='Update')

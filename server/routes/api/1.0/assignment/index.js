@@ -165,6 +165,15 @@ function get (assignmentHash) {
             learners.forEach((learner) => {
               assignment.learners.push(learner.toJSON());
             });
+
+            assignment.learners.forEach((learner) => {
+              learner.submissions.forEach((submission) => {
+                if (submission.assignment === assignment.ID) {
+                  learner.post = submission.post;
+                }
+              });
+            });
+
             if (assignment.graded && assignment.graded.columnId) {
               getGrades(assignment.courseId, assignment.graded.columnId)
                 .then((grades) => {
