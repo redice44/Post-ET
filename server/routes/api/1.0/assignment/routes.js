@@ -6,8 +6,8 @@ const assignmentAPI = require('./index');
 const bbAPI = require('../../bb');
 const userAPI = require('../user');
 
-router.get('/:assignmentId', (req, res) => {
-  assignmentAPI.findOne({ ID: req.params.assignmentId })
+router.get('/:asId', (req, res) => {
+  assignmentAPI.findOne({ ID: req.params.asId })
     .then((assignment) => {
       // return some display page I guess
       bbAPI.course.grades.getColumnGrades(assignment.courseId, assignment.columnId)
@@ -38,6 +38,7 @@ router.post('/', (req, res) => {
 
   assignmentAPI.create(assignmentData, req.session.envId)
     .then((assignment) => {
+      // redirect for now
       // update blackboard content item
       return res.redirect(`/instructor/as/${assignment.ID}/`);
     })
@@ -47,6 +48,28 @@ router.post('/', (req, res) => {
     });
 });
 
+// Updates an assignment
+// update to put. Using post for now since I'm testing with forms.
+router.post('/:asId', (req, res) => {
+  let assignmentData = {
+    name: req.body.name,
+    description: req.body.description
+  };
+
+  assignmentAPI.update(req.params.asId, assignmentData)
+    .then((assignment) => {
+      // redirect for now
+      // update blackboard content item
+      return res.redirect(`/instructor/as/${assignment.ID}/`);
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).send(err);
+    });
+});
+
+// Updates a learner's grade for the assignment
+// Probably should use put. 
 router.post('/:asId/learner/:lId', (req, res) => {
   assignmentAPI.findOne({ ID: req.params.asId })
     .then((assignment) => {
@@ -56,7 +79,7 @@ router.post('/:asId/learner/:lId', (req, res) => {
       assignmentAPI.updateGrade(assignment.courseId, assignment.columnId, req.params.lId, grade)
         .then((updatedGrade) => {
           // temp just send them back to the assignment page to see the update
-          return res.redirect(`/instructor/${req.params.asId}`);
+          return res.redirect(`/instructor/as/${req.params.asId}`);
         })
         .catch((err) => {
           console.log(err);

@@ -136,7 +136,7 @@ function getOrCreate (q, assignmentData) {
 // Only allow name, description, and learners to be updated.
 function update (assignmentHash, assignmentData) {
   return new Promise((resolve, reject) => {
-    get({ ID: assignmentHash })
+    findOne({ ID: assignmentHash })
       .then((assignment) => {
         assignment.name = assignmentData.name || assignment.name;
         assignment.description = assignmentData.description || assignment.description;
@@ -186,4 +186,5 @@ exports.findOne = findOne;
 exports.get = get;
 exports.getGrades = getGrades;
 exports.getOrCreate = getOrCreate;
+exports.update = update;
 exports.updateGrade = updateGrade;

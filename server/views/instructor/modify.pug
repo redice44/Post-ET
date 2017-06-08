@@ -1,0 +1,16 @@
+doctype html
+html
+  head
+    link(rel='stylesheet', href='/css/core.css', type='text/css')
+    link(rel='stylesheet', href='/css/instructor/create.css', type='text/css')
+  body
+    h1= action + ' Assignment'
+    form#asform(method=httpVerb, action=endpoint)
+      input(type='hidden', name='asId', value=assignment.ID)
+      div
+        label(for='name') Assignment Name
+        input(type='text', name='name', value=assignment.name)
+      div
+        textarea(name='description', placeholder='Assignment Description')= assignment.description
+      div
+        input(type='submit', value= action + ' Assignment')
