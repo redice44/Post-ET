@@ -10,7 +10,7 @@ router.get('/:asId', (req, res) => {
   assignmentAPI.findOne({ ID: req.params.asId })
     .then((assignment) => {
       // return some display page I guess
-      bbAPI.course.grades.getColumnGrades(assignment.courseId, assignment.columnId)
+      bbAPI.course.grades.getColumnGrades(assignment.courseId, assignment.graded.columnId)
         .then((grades) => {
           console.log(grades);
           return res.send(grades);
@@ -28,6 +28,7 @@ router.get('/:asId', (req, res) => {
 
 // Creates new assignment
 router.post('/', (req, res) => {
+  console.log(req.body);
   let assignmentData = {
     ID: req.body.asId,
     name: req.body.name,
@@ -36,16 +37,45 @@ router.post('/', (req, res) => {
     contentId: req.session.contentId,
   };
 
-  assignmentAPI.create(assignmentData, req.session.envId)
-    .then((assignment) => {
-      // redirect for now
-      // update blackboard content item
-      return res.redirect(`/instructor/as/${assignment.ID}/`);
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.status(500).send(err);
-    });
+  if (req.body.graded) {
+    assignmentData.graded = true;
+    if (req.body.maxPoints) {
+      assignmentData.maxPoints = req.body.maxPoints;
+    } else {
+      assignmentData.maxPoints = 0;
+    }
+  }
+
+  console.log('assignment data');
+  console.log(assignmentData);
+
+
+
+  // bbAPI.course.grades.deleteColumn(assignmentData.courseId)
+  //   .then((asyncRes) => {
+
+
+
+      assignmentAPI.create(assignmentData, req.session.envId)
+        .then((assignment) => {
+          // redirect for now
+          // update blackboard content item
+          return res.redirect(`/instructor/as/${assignment.ID}/`);
+        })
+        .catch((err) => {
+          console.log(err);
+          return res.status(500).send(err);
+        });
+
+
+
+
+    // })
+    // .catch((err) => {
+    //   console.log(err);
+    //   return res.status(500).send(err);
+    // });
+
 });
 
 // Updates an assignment

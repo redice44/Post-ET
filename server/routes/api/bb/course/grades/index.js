@@ -5,6 +5,53 @@ const authAPI = require('../../auth');
 const domain = 'http://localhost:9876';
 const gradesEndpoint = '/learn/api/public/v1/courses/';
 
+function createColumn (courseId, columnData) {
+  return new Promise((resolve, reject) => {
+    authAPI.getToken()
+      .then((token) => {
+        console.log(`-> BB [POST]: ${domain}${gradesEndpoint}externalId:${courseId}/gradebook/columns`);
+        request.post(`${domain}${gradesEndpoint}externalId:${courseId}/gradebook/columns`)
+          .set('Authorization', `Bearer ${token}`)
+          .set('Content-Type', 'application/json')
+          .send(columnData)
+          .end((err, asyncRes) => {
+            if (err || asyncRes.status !== 201) {
+              return reject(err || asyncRes.status);
+            }
+
+            return resolve(JSON.parse(asyncRes.text));
+          });
+      })
+      .catch((err) => {
+        return reject(err);
+      });
+  });
+}
+
+function deleteColumn (courseId, columnId) {
+  columnId = 'string16';
+  return new Promise((resolve, reject) => {
+    authAPI.getToken()
+      .then((token) => {
+        console.log(`-> BB [DELETE]: ${domain}${gradesEndpoint}externalId:${courseId}/gradebook/columns/externalId:${columnId}`);
+        request.delete(`${domain}${gradesEndpoint}externalId:${courseId}/gradebook/columns/externalId:${columnId}`)
+          .set('Authorization', `Bearer ${token}`)
+          // .set('Content-Type', 'application/json')
+          // .send(columnData)
+          .end((err, asyncRes) => {
+            if (err || asyncRes.status !== 200) {
+              return reject(err || asyncRes.status);
+            }
+
+            return resolve(JSON.parse(asyncRes.text));
+          });
+      })
+      .catch((err) => {
+        return reject(err);
+      });
+  });
+}
+
 function getColumns (courseId) {
   return new Promise((resolve, reject) => {
     authAPI.getToken()
@@ -70,6 +117,8 @@ function setGrade (courseId, columnId, userId, grade) {
   });
 }
 
+exports.createColumn = createColumn;
+exports.deleteColumn = deleteColumn;
 exports.getColumns = getColumns;
 exports.getColumnGrades = getColumnGrades;
 exports.setGrade = setGrade;

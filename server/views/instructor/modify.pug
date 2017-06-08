@@ -8,9 +8,20 @@ html
     form#asform(method=httpVerb, action=endpoint)
       input(type='hidden', name='asId', value=assignment.ID)
       div
-        label(for='name') Assignment Name
-        input(type='text', name='name', value=assignment.name)
+        if assignment.graded
+          p= assignment.name
+        else 
+          label(for='name') Assignment Name
+          input(type='text', name='name', value=assignment.name)
       div
         textarea(name='description', placeholder='Assignment Description')= assignment.description
+      div
+        if assignment.graded
+          p= 'Graded: Possible points: ' + assignment.graded.maxPoints
+        else 
+          label(for='graded') Graded: 
+          input(type='checkbox', name='graded')
+          label(for='maxPoints') Max Points
+          input(type='number', name='maxPoints', min=0)
       div
         input(type='submit', value= action + ' Assignment')

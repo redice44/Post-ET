@@ -41,27 +41,96 @@ function create (assignmentData, envId) {
             }))
               .then((students) => {
                 // Get Gradebook Columns
-                bbAPI.course.grades.getColumns(assignmentData.courseId)
-                  .then((columns) => {
-                    columns = columns.results;
-                    columns.forEach((column) => {
-                      if (column.contentId && column.contentId === assignmentData.contentId) {
-                        assignmentData.columnId = column.id;
+                if (assignmentData.graded) {
+                  assignmentData.graded = {};
+                  assignmentData.graded.maxPoints = assignmentData.maxPoints;
+                  delete assignmentData.maxPoints;
+
+                  let columnData = {
+                    "externalId": assignmentData.name,
+                    "name": assignmentData.name,
+                    // "description": "string",
+                    // "externalGrade": true,
+                    "score": {
+                      "possible": assignmentData.graded.maxPoints,
+                      // "decimalPlaces": 0
+                    },
+                    "availability": {
+                      "available": "Yes"
+                    },
+                    "grading": {
+                      "type": "Manual",
+                      // "due": "2017-06-05T19:34:25.125Z",
+                      // "attemptsAllowed": 0,
+                      // "scoringModel": "Last",
+                      "anonymousGrading": {
+                        "type": "None",
+                        // "releaseAfter": "2017-06-05T19:34:25.125Z"
                       }
-                    });
-                    getOrCreate({ ID: assignmentData.ID }, assignmentData)
+                    }
+                  };
+
+                  console.log('column data');
+                  console.log(columnData);
+
+                  // Create grade column for assignment
+                  // We do this because we cannot edit content items that are
+                  // graded if they were created in BB that way.
+                  // So we create our own column and assocations.
+                  bbAPI.course.grades.createColumn(assignmentData.courseId, columnData)
+                    .then((column) => {
+                      console.log('column created')
+                      console.log(column);
+                      assignmentData.graded.columnId = column.id;
+                      getOrCreate({ ID: assignmentData.ID }, assignmentData)
                       .then((as) => {
-                        return resolve(as);
+                        // update content
+                        let contentData = {
+                          title: as.name,
+                          body: as.description
+                        };
+
+                        // Update content item in BB.
+                        bbAPI.course.content.update(as.courseId, as.contentId, contentData)
+                          .then(() => {
+                            return resolve(as);
+                          })
+                          .catch((err) => {
+                            console.log(err);
+                            return reject(err);
+                          });
                       })
                       .catch((err) => {
                         console.log(err);
                         return reject(err);
                       });
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                    return reject(err);
-                  });
+                    })
+                    .catch((err) => {
+                      return reject(err);
+                    });
+                } else {
+                  getOrCreate({ ID: assignmentData.ID }, assignmentData)
+                    .then((as) => {
+                      // update content
+                      let contentData = {
+                        title: as.name,
+                        body: as.description
+                      };
+
+                      bbAPI.course.content.update(as.courseId, as.contentId, contentData)
+                        .then(() => {
+                          return resolve(as);
+                        })
+                        .catch((err) => {
+                          console.log(err);
+                          return reject(err);
+                        });
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                      return reject(err);
+                    });
+                }
               })
               .catch((err) => {
                 console.log(err);
@@ -96,8 +165,8 @@ function get (assignmentHash) {
             learners.forEach((learner) => {
               assignment.learners.push(learner.toJSON());
             });
-            if (assignment.columnId) {
-              getGrades(assignment.courseId, assignment.columnId)
+            if (assignment.graded && assignment.graded.columnId) {
+              getGrades(assignment.courseId, assignment.graded.columnId)
                 .then((grades) => {
                   grades.results.forEach((grade) => {
                     assignment.learners.forEach((learner) => {
@@ -145,7 +214,19 @@ function update (assignmentHash, assignmentData) {
 
         assignment.save()
           .then((as) => {
-            return resolve(as);
+            let contentData = {
+              title: as.name,
+              body: as.description
+            };
+
+            bbAPI.course.content.update(as.courseId, as.contentId, contentData)
+              .then(() => {
+                return resolve(as);
+              })
+              .catch((err) => {
+                console.log(err);
+                return reject(err);
+              });
           })
           .catch((err) => {
             return reject(err);
@@ -174,7 +255,7 @@ function updateGrade (asId, userId, grade) {
   return new Promise((resolve, reject) => {
     findOne({ ID: asId })
       .then((assignment) => {
-        bbAPI.course.grades.setGrade(assignment.courseId, assignment.columnId, userId, grade)
+        bbAPI.course.grades.setGrade(assignment.courseId, assignment.graded.columnId, userId, grade)
           .then((updatedGrade) => {
             return resolve(updatedGrade);
           })

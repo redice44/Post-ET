@@ -8,19 +8,21 @@ html
       a(href='/instructor/as/' + assignment.ID + '/edit') Edit
     p Description
     p= assignment.description
+    if assignment.graded
+      p= 'Possible Points: ' + assignment.graded.maxPoints
     p Students
     table#gradebook
       thead
         tr
           td Student Name
-          if assignment.columnId
+          if assignment.graded
             td Grade
             td Set Grade
       tbody
         each learner in assignment.learners
           tr
             td= learner.name
-            if assignment.columnId
+            if assignment.graded
               td= learner.grade
               td
                 form(action='/api/1.0/assignment/' + assignment.ID + '/learner/' + learner.envUserId, method="POST")
