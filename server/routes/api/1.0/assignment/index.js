@@ -1,10 +1,84 @@
 const mongoose = require('mongoose');
 
 const bbAPI = require('../../bb/');
+const securityUtil = require('../../../../util/security');
 const userAPI = require('../user');
 
 /* Model */
 const Assignment = mongoose.model('Assignment');
+
+// Create new assignment
+// Populates the assignment with the learners in the course
+// Creates user documents for the learners
+function create (assignmentData, envId) {
+  return new Promise((resolve, reject) => {
+    bbAPI.course.users.getStudents(assignmentData.courseId)
+      .then((students) => {
+        // Get all students on course list
+        Promise.all(students.map((student) => {
+          return bbAPI.users.getUser(student.userId);
+        }))
+          .then((students) => {
+            let studentHashes = students.map((student) => {
+              return securityUtil.hashUser({
+                envId: envId,
+                courseId: assignmentData.courseId,
+                userId: student.id
+              });
+            });
+
+            // Add learner list to assignment
+            assignmentData.learners = studentHashes;
+
+            // Update student list 
+            Promise.all(students.map((student, i) => {
+              return userAPI.getOrCreate({ ID: studentHashes[i] }, {
+                ID: studentHashes[i],
+                role: 'Student',    // Guaranteed to be only students
+                envUserId: student.id,
+                name: `${student.name.given} ${student.name.family}`
+              });
+            }))
+              .then((students) => {
+                // Get Gradebook Columns
+                bbAPI.course.grades.getColumns(assignmentData.courseId)
+                  .then((columns) => {
+                    columns = columns.results;
+                    columns.forEach((column) => {
+                      if (column.contentId && column.contentId === assignmentData.contentId) {
+                        assignmentData.columnId = column.id;
+                      }
+                    });
+                    getOrCreate({ ID: assignmentData.ID }, assignmentData)
+                      .then((as) => {
+                        return resolve(as);
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                        return reject(err);
+                      });
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    return reject(err);
+                  });
+              })
+              .catch((err) => {
+                console.log(err);
+                return reject(err);
+              });
+          })
+          .catch((err) => {
+            console.log(err);
+            return reject(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+        return reject(err);
+      });
+  });
+}
 
 function findOne (q) {
   return Assignment.findOne(q).exec();
@@ -107,6 +181,7 @@ function updateGrade (courseId, columnId, userId, grade) {
   });
 }
 
+exports.create = create;
 exports.findOne = findOne;
 exports.get = get;
 exports.getGrades = getGrades;
