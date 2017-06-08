@@ -27,10 +27,14 @@ router.get('/:assignmentId', (req, res) => {
     });
 });
 
+// Create new assignment
+// Populates the assignment with the learners in the course
+// Creates user documents for the learners
 router.post('/', (req, res) => {
   let assignmentData = {
-    ID: req.body.id,
+    ID: req.body.asId,
     name: req.body.name,
+    description: req.body.description,
     courseId: req.session.courseId,
     contentId: req.session.contentId,
   };
@@ -76,7 +80,7 @@ router.post('/', (req, res) => {
                   assignmentAPI.getOrCreate({ ID: assignmentData.ID }, assignmentData)
                     .then((as) => {
                       // probably should be .json return of assignment
-                      return res.redirect(`/instructor/${assignmentData.ID}/`);
+                      return res.redirect(`/instructor/as/${assignmentData.ID}/`);
                     })
                     .catch((err) => {
                       console.log(err);

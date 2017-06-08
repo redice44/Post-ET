@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
   res.render('instructor/dash');
 });
 
-router.get('/:asId', (req, res) => {
+router.get('/as/:asId', (req, res) => {
   let assignmentHash = req.params.asId;
   console.log(assignmentHash);
 
@@ -33,11 +33,14 @@ router.get('/:asId', (req, res) => {
     });
 });
 
-router.get('/:asId/create', (req, res) => {
+router.get('/as/:asId/create', (req, res) => {
   let locals = {
-    assignmentId: securityUtil.hashAssignment(req.session),
+    assignmentId: req.params.asId,
     assignmentName: req.session.assignmentName
   };
+
+  // Remove assignment name from session
+  delete req.session.assignmentName;
 
   res.render('instructor/create', locals);
 });

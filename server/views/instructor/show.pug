@@ -4,6 +4,8 @@ html
     link(rel='stylesheet', href='/css/grade.css', type='text/css')
   body
     h1= 'Assignment: ' + assignment.name
+    p Description
+    p= assignment.description
     p Students
     table#gradebook
       thead
