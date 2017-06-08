@@ -71,20 +71,13 @@ router.post('/:asId', (req, res) => {
 // Updates a learner's grade for the assignment
 // Probably should use put. 
 router.post('/:asId/learner/:lId', (req, res) => {
-  assignmentAPI.findOne({ ID: req.params.asId })
-    .then((assignment) => {
-      let grade = {
-        score: req.body.grade
-      };
-      assignmentAPI.updateGrade(assignment.courseId, assignment.columnId, req.params.lId, grade)
-        .then((updatedGrade) => {
-          // temp just send them back to the assignment page to see the update
-          return res.redirect(`/instructor/as/${req.params.asId}`);
-        })
-        .catch((err) => {
-          console.log(err);
-          return res.status(500).send(err);
-        });
+  let grade = {
+    score: req.body.grade
+  };
+
+  assignmentAPI.updateGrade(req.params.asId, req.params.lId, grade)
+    .then(() => {
+      return res.redirect(`/instructor/as/${req.params.asId}`);
     })
     .catch((err) => {
       console.log(err);

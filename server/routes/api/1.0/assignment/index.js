@@ -111,8 +111,9 @@ function get (assignmentHash) {
                 .catch((err) => {
                   return reject(err);
                 });
+            } else {
+              return resolve(assignment);
             }
-            return resolve(assignment);
           })
           .catch((err) => {
             return reject(err);
@@ -169,11 +170,17 @@ function getGrades (courseId, columnId) {
   });
 }
 
-function updateGrade (courseId, columnId, userId, grade) {
+function updateGrade (asId, userId, grade) {
   return new Promise((resolve, reject) => {
-    bbAPI.course.grades.setGrade(courseId, columnId, userId, grade)
-      .then((updatedGrade) => {
-        return resolve(updatedGrade);
+    findOne({ ID: asId })
+      .then((assignment) => {
+        bbAPI.course.grades.setGrade(assignment.courseId, assignment.columnId, userId, grade)
+          .then((updatedGrade) => {
+            return resolve(updatedGrade);
+          })
+          .catch((err) => {
+            return reject(err);
+          });
       })
       .catch((err) => {
         return reject(err);

@@ -16,15 +16,13 @@ router.get('/', (req, res) => {
 
 router.get('/as/:asId', (req, res) => {
   let assignmentHash = req.params.asId;
-  console.log(assignmentHash);
 
   assignmentAPI.get(assignmentHash)
     .then((assignment) => {
       let locals = {
         assignment: assignment
       };
-      console.log('get assignment');
-      console.log(assignment);
+      
       return res.render('instructor/show', locals);
     })
     .catch((err) => {
