@@ -1,8 +1,0 @@
-#gradebook {
-  border-collapse: collapse;
-}
-
-#gradebook td {
-  border: 1px solid black;
-  padding: 10px;
-}

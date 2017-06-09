@@ -1,0 +1,92 @@
+#gradebook {
+  border-collapse: collapse;
+}
+
+#gradebook td {
+  border: 1px solid black;
+  padding: 10px;
+}
+
+#posts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#posts > div {
+  background-color: #fff;
+}
+
+.needsGrading, .graded {
+  width: 600px;
+  border: 1px solid black;
+}
+.needsGrading {
+  margin-bottom: 10px;
+  border-radius: 0 0 10px 0;
+}
+
+.needsGrading section > header {
+  border-bottom: 1px solid black;
+  border-top: 1px solid black;
+}
+
+#posts section > header {
+  /*background-color: #001f54;*/
+  /*background-color: #5b7281;*/
+  background-color: #536774;
+  color: #fff;
+  padding: 10px;
+}
+
+.needsGrading article {
+  display: flex;
+}
+
+.graded article {
+  display: none;
+}
+
+#posts article > div.post > img {
+  width: 300px;
+  height: 300px;
+}
+
+#posts article > div.grade > div {
+  width: 300px;
+}
+
+.post, .grade {
+  height: 300px;
+}
+
+.grade {
+  margin-left: 5px;
+}
+
+.assignment {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.assignment > h1 {
+  /*text-align: center;*/
+  margin: 20px;
+}
+
+.assignment > div {
+  width: 600px;
+  margin: 10px;
+}
+
+.tag {
+  float: right;
+  background-color: #ddd;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 4px;
+  font-size: 10px;
+  color: red;
+}
+

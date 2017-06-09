@@ -1,0 +1,21 @@
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+}
+html, body {
+  background-color: #eaeaea;
+  font-family: sans-serif;
+}
+
+body > footer {
+  background-color: #333;
+  color: #ddd;
+}
+
+body > footer > div {
+  margin-top: 10px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
