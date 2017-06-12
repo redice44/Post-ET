@@ -11,7 +11,7 @@ const userAPI = require('../api/1.0/user');
 
 router.post('/launch', (req, res) => {
   if (!validateLTI(req.body)) {
-    res.status(400).send('Bad Request');
+    return res.status(400).send('Bad Request');
   }
 
   // console.log(req.body);
@@ -47,18 +47,20 @@ router.post('/launch', (req, res) => {
           assignmentAPI.findOne({ ID: assignmentHash})
             .then((assignment) => {
               if (!assignment) {
+                console.log('asId', assignmentHash);
+                console.log(`${redirectUrl}/as/${assignmentHash}/create`);
                 return res.redirect(`${redirectUrl}/as/${assignmentHash}/create`);
               }
-
+              console.log('assignment', assignment);
               return res.redirect(`${redirectUrl}/as/${assignmentHash}`);
             })
             .catch((err) => {
-              console.log(err);
+              console.log('error', err);
               return res.status(500).send(err);
             });
         })
         .catch((err) => {
-          console.log(err);
+          console.log('err2', err);
           return res.status(500).send(err);
         });
       break;

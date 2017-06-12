@@ -6,12 +6,12 @@ const path = require('path');
 
 const instagramAPI = require('../api/instagram');
 
-// router.get('/', (req, res) => {
-//   console.log(`Session ID: ${req.session.userId}`);
-//   return res.render('learner/showAuth');
-// });
+router.get('/', (req, res) => {
+  console.log(`Session ID: ${req.session.userId}`);
+  return res.render('learner/showAuth');
+});
 
-router.get('/', instagramAPI.auth.authUser);
+// router.get('/', instagramAPI.auth.authUser);
 
 router.get('/user/:userId/as/:asId', (req, res) => {
   instagramAPI.self.feed(req.session.access_token)
@@ -54,16 +54,7 @@ router.get('/user/:userId/as/:asId', (req, res) => {
 
 router.get('/auth_user', instagramAPI.auth.authUser);
 
-router.get('/handleauth', (req, res) => {
-  // console.log('session', req.session);
-  console.log('error', req.query.error);
-  if (req.query.error) {
-    console.log('error', req.query.error);
-    console.log('reason', req.query.error_reason);
-    console.log('description', req.query.error_description);
-    return res.status(500).send(req.query.error);
-  }
-
+router.get('/authToken', (req, res) => {
   instagramAPI.auth.getAuthToken(req.query.code)
     .then((result) => {
       console.log('result', result);
@@ -78,6 +69,38 @@ router.get('/handleauth', (req, res) => {
       console.log(err);
       return res.status(500).send(err);
     });
+});
+
+router.get('/handleauth', (req, res) => {
+  // console.log('session', req.session);
+  console.log('error', req.query.error);
+  if (req.query.error) {
+    console.log('error', req.query.error);
+    console.log('reason', req.query.error_reason);
+    console.log('description', req.query.error_description);
+    return res.status(500).send(req.query.error);
+  }
+
+  let locals = {
+    code: req.query.code
+  };
+
+  return res.render('learner/authRedirect', locals);
+
+  // instagramAPI.auth.getAuthToken(req.query.code)
+  //   .then((result) => {
+  //     console.log('result', result);
+  //     req.session.access_token = result.access_token;
+  //     req.session.instagram = result.user;
+  //     req.session.userId = result.userId;
+  //     req.session.asId = result.asId;
+
+  //     return res.redirect(`/learner/user/${result.userId}/as/${result.asId}`);
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //     return res.status(500).send(err);
+  //   });
 });
 
 module.exports = router;

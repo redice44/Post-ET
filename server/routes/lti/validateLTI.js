@@ -81,7 +81,8 @@ function isValidLTI (params) {
   let consumerSecret = 'secret';
 
   let method = 'POST';
-  let url = 'http://www.bb-lti.com/lti/launch';
+  // let url = 'http://www.bb-lti.com/lti/launch';
+  let url = 'http://localhost/lti/launch';
   let parameters = Object.assign({}, params);
   delete parameters.oauth_signature
   let sig = oauthSignature.generate(method, url, parameters, consumerSecret, '', { encodeSignature: false });
