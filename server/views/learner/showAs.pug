@@ -1,0 +1,19 @@
+doctype html
+html
+  head
+    link(rel='stylesheet', href='/css/core.css', type='text/css')
+    link(rel='stylesheet', href='/css/post.css', type='text/css')
+  body
+    #content
+      #feed
+        section.post
+          header
+            p= assignment.name
+          article.assignment
+            .description
+              p= assignment.description
+            if assignment.graded
+              .graded
+                p= 'Possible Points: ' + assignment.graded.maxPoints
+          footer
+            a(href='/learner/auth') Start Submission

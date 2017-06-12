@@ -1,0 +1,62 @@
+#feed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.post {
+  margin-bottom: 10px;
+  border: 1px solid black;
+}
+
+.post > header {
+  background-color: #536774;
+  color: #fff;
+  padding: 10px 10px 10px 20px;
+  height: 50px;
+  font-size: 25px;
+  line-height: 30px;
+  box-sizing: border-box;
+  border-bottom: 1px solid black;
+}
+
+.post > article {
+  background-color: #eaeaea;
+}
+
+.post > .assignment {
+  padding: 20px;
+  width: 600px;
+}
+
+.post > .submission > .details {
+  padding: 20px;
+}
+
+.post > footer {
+  width: 100%;
+  background-color: #2308a7;
+  color: #fff;
+  border-top: 1px solid black;
+  /*padding: 10px;*/
+  box-sizing: border-box;
+  text-align: center;
+  height: 50px;
+  line-height: 30px;
+  font-size: 20px;
+}
+
+.post > footer input[type='submit'] {
+  background-color: #2308a7;
+  border: 0;
+  height: 50px;
+  width: 100%;
+  line-height: 30px;
+  font-size: 20px;
+  color: #fff;
+}
+
+.post > footer input:hover {
+  background-color: #2b0ad0;
+}

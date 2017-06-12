@@ -2,7 +2,7 @@ doctype html
 html
   head
     link(rel='stylesheet', href='/css/core.css', type='text/css')
-    link(rel='stylesheet', href='/css/instructor/grade.css', type='text/css')
+    link(rel='stylesheet', href='/css/post.css', type='text/css')
   body
     //- h1= 'Assignment: ' + assignment.name
     //- p
@@ -38,45 +38,74 @@ html
     //-             form(action='/api/1.0/assignment/' + assignment.ID + '/learner/' + learner.envUserId, method="POST")
     //-               input(type='number', name='grade', placeholder='Grade', min=0, max=assignment.graded.maxPoints)
     //-               input(type='submit', value='Update')
-    p
-      a(href='/instructor/as/' + assignment.ID + '/edit') Edit
-    .assignment
-      h1= assignment.name
-      div
-        p= assignment.description
-    #posts
-      each learner in assignment.learners
-        if learner.post
-          div.needsGrading
-            section
+    #content
+      p
+        a(href='/instructor/as/' + assignment.ID + '/edit') Edit
+      #feed
+        section.post
+          header
+            p= assignment.name
+          article.assignment
+            .description
+              p= assignment.description
+            if assignment.graded
+              .graded
+                p= 'Possible Points: ' + assignment.graded.maxPoints
+          //- footer
+        each learner in assignment.learners
+          if learner.post
+            section.post(style='width: ' + learner.post.width + 'px')
               header
-                h3
-                  span.title= learner.name
-                    span.tag New
-                    span.tag No Post
-              article(style='height: ' + learner.post.height + 'px;')
-                .post
-                  if learner.post.type
-                    if learner.post.type == 'image'
-                      img(src=learner.post.url, style='width: ' + learner.post.width + 'px; height: ' + learner.post.height + 'px;')
-                    else
-                      video(src=learner.post.url, width=learner.post.width, height=learner.post.height, controls)
-                .grade
-                  if learner.post.description
-                    div
-                      p= learner.post.description
-                  div
-                    if assignment.graded
-                      form(action='/api/1.0/assignment/' + assignment.ID + '/learner/' + learner.envUserId, method="POST")
-                        input(type='number', name='grade', placeholder='Grade', min=0, max=assignment.graded.maxPoints)
-                        input(type='submit', value='Update') 
-        else
-          div.graded
-            section
+                p= learner.name
+              article.submission
+                .media(style='height: ' + learner.post.height + 'px')
+                  if learner.post.type === 'image'
+                    img(src=learner.post.url, style='width: ' + learner.post.width + 'px; height: ' + learner.post.height + 'px')
+                  else
+                    video(src=learner.post.url, style='width: ' + learner.post.width + 'px; height: ' + learner.post.height + 'px', controls)
+                .details
+                  p= learner.post.description
+          else
+            section.post(style='width: 640px')
               header
-                h3
-                  span.title= learner.name
-                    span.tag No Post
+                p= learner.name
+    //- .assignment
+    //-   h1= assignment.name
+    //-   div
+    //-     p= assignment.description
+    //- #posts
+    //-   each learner in assignment.learners
+    //-     if learner.post
+    //-       div.needsGrading
+    //-         section
+    //-           header
+    //-             h3
+    //-               span.title= learner.name
+    //-                 span.tag New
+    //-                 span.tag No Post
+    //-           article(style='height: ' + learner.post.height + 'px;')
+    //-             .post
+    //-               if learner.post.type
+    //-                 if learner.post.type == 'image'
+    //-                   img(src=learner.post.url, style='width: ' + learner.post.width + 'px; height: ' + learner.post.height + 'px;')
+    //-                 else
+    //-                   video(src=learner.post.url, width=learner.post.width, height=learner.post.height, controls)
+    //-             .grade
+    //-               if learner.post.description
+    //-                 div
+    //-                   p= learner.post.description
+    //-               div
+    //-                 if assignment.graded
+    //-                   form(action='/api/1.0/assignment/' + assignment.ID + '/learner/' + learner.envUserId, method="POST")
+    //-                     input(type='number', name='grade', placeholder='Grade', min=0, max=assignment.graded.maxPoints)
+    //-                     input(type='submit', value='Update') 
+    //-     else
+    //-       div.graded
+    //-         section
+    //-           header
+    //-             h3
+    //-               span.title= learner.name
+    //-                 span.tag No Post
 
       //- each v in [1, 2, 3, 4, 5] 
       //-   each learner in assignment.learners

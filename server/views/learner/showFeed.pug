@@ -2,31 +2,31 @@ doctype html
 html
   head
     link(rel='stylesheet', href='/css/core.css', type='text/css')
-    link(rel='stylesheet', href='/css/learner/feed.css', type='text/css')
+    link(rel='stylesheet', href='/css/post.css', type='text/css')
   body
-    #media
+    #feed
       each m in media
-        section(style='width: ' + m.width + 'px')
+        section(style='width: ' + m.width + 'px').post
           header
             //- a(href=m.postLink, target='_blank')= m.postLink
             p= username
-          article
-            .post(style='height: ' + m.height + 'px')
+          article.submission
+            .media(style='height: ' + m.height + 'px')
               if m.type == 'image'
                 img(src=m.url, width=m.width, height=m.height)
               else
                 video(src=m.url, width=m.width, height=m.height, controls)
             .details
               p= m.description
-              //- form(action='/api/1.0/user/' + userId + '/as/' + asId, method='POST')
-              //-   input(type='hidden', name='url', value=m.url)
-              //-   input(type='hidden', name='type', value=m.type)
-              //-   input(type='hidden', name='width', value=m.width)
-              //-   input(type='hidden', name='height', value=m.height)
-              //-   input(type='hidden', name='postLink', value=m.postLink)
-              //-   input(type='hidden', name='mediaId', value=m.id)
-              //-   input(type='hidden', name='userId', value=userId)
-              //-   input(type='hidden', name='description', value=m.description)
-              //-   input(type='submit', value='Submit Post')
-          footer.submit Submit Post
+          footer
+            form(action='/api/1.0/user/' + userId + '/as/' + asId, method='POST')
+              input(type='hidden', name='url', value=m.url)
+              input(type='hidden', name='type', value=m.type)
+              input(type='hidden', name='width', value=m.width)
+              input(type='hidden', name='height', value=m.height)
+              input(type='hidden', name='postLink', value=m.postLink)
+              input(type='hidden', name='mediaId', value=m.id)
+              input(type='hidden', name='userId', value=userId)
+              input(type='hidden', name='description', value=m.description)
+              input(type='submit', value='Submit Post')
     
