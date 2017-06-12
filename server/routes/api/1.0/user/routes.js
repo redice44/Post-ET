@@ -16,12 +16,24 @@ router.get('/:userId', (req, res) => {
     });
 });
 
+// Submit post to assignment
 router.post('/:userId/as/:asId', (req, res) => {
-  userAPI.submit(req.params.userId, req.params.asId, req.body.submission)
+  let submission = {
+    ID: req.body.mediaId,
+    postLink: req.body.postLink,
+    type: req.body.type,
+    width: parseInt(req.body.width),
+    height: parseInt(req.body.height),
+    url: req.body.url,
+    description: req.body.description
+  };
+
+  userAPI.submit(req.params.userId, req.params.asId, submission)
     .then((user) => {
       console.log('after submit user');
       console.log(user);
-      return res.redirect(`/instructor/as/${req.params.asId}/`);
+      // return res.redirect(`/instructor/as/${req.params.asId}/`);
+      return res.redirect(`/learner`);
     })
     .catch((err) => {
       console.log(err);

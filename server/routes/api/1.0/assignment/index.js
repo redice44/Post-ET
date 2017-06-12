@@ -20,13 +20,19 @@ function create (assignmentData, envId) {
         }))
           .then((students) => {
             let studentHashes = students.map((student) => {
+              // console.log('hashing...');
+              // console.log(envId);
+              // console.log(assignmentData.courseId);
+              // console.log(student.id);
               return securityUtil.hashUser({
                 envId: envId,
                 courseId: assignmentData.courseId,
-                userId: student.id
+                // userId: student.id
+                userId: student.userName
               });
             });
 
+            console.log('student hashes', studentHashes);
             // Add learner list to assignment
             assignmentData.learners = studentHashes;
 
@@ -159,6 +165,7 @@ function get (assignmentHash) {
       .then((assignment) => {
         userAPI.find({ ID: { $in: assignment.learners }})
           .then((learners) => {
+            console.log('learners are...', learners);
             assignment = assignment.toObject();
 
             assignment.learners = [];
@@ -167,7 +174,10 @@ function get (assignmentHash) {
             });
 
             assignment.learners.forEach((learner) => {
+              // console.log(learner.name);
+              // console.log('assignment id', assignment.ID);
               learner.submissions.forEach((submission) => {
+                // console.log('submission id', submission.assignment);
                 if (submission.assignment === assignment.ID) {
                   learner.post = submission.post;
                 }

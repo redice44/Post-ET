@@ -46,47 +46,59 @@ html
         p= assignment.description
     #posts
       each learner in assignment.learners
-        div.needsGrading
-          section
-            header
-              h3
-                span.title= learner.name
-                span.tag New
-            article
-              .post
-                img(src='https://scontent-mia1-1.cdninstagram.com/t51.2885-15/e35/14272190_138092099979543_2004957732_n.jpg')
-              .grade
-                div
-                  p Description
-                  p * 2 Options for Students - MUST BE PUBLIC ACCOUNT
-                  p * Either personal account 
-                  p * Or student account 
-                  p * 2200 character limit - instagram will be the one to limit you not us
-                div
-                  form(action='/api/1.0/assignment/' + assignment.ID + '/learner/' + learner.envUserId, method="POST")
-                    input(type='number', name='grade', placeholder='Grade', min=0, max=assignment.graded.maxPoints)
-                    input(type='submit', value='Update') 
-      each v in [1, 2, 3, 4, 5] 
-        each learner in assignment.learners
+        if learner.post
+          div.needsGrading
+            section
+              header
+                h3
+                  span.title= learner.name
+                    span.tag New
+                    span.tag No Post
+              article(style='height: ' + learner.post.height + 'px;')
+                .post
+                  if learner.post.type
+                    if learner.post.type == 'image'
+                      img(src=learner.post.url, style='width: ' + learner.post.width + 'px; height: ' + learner.post.height + 'px;')
+                    else
+                      video(src=learner.post.url, width=learner.post.width, height=learner.post.height, controls)
+                .grade
+                  if learner.post.description
+                    div
+                      p= learner.post.description
+                  div
+                    if assignment.graded
+                      form(action='/api/1.0/assignment/' + assignment.ID + '/learner/' + learner.envUserId, method="POST")
+                        input(type='number', name='grade', placeholder='Grade', min=0, max=assignment.graded.maxPoints)
+                        input(type='submit', value='Update') 
+        else
           div.graded
             section
               header
                 h3
                   span.title= learner.name
-                  if v % 2 == 0
-                    span.tag Graded
-                  else
                     span.tag No Post
-              article
-                .post
-                  img(src='https://scontent-mia1-1.cdninstagram.com/t51.2885-15/e35/14272190_138092099979543_2004957732_n.jpg')
-                .grade
-                  div
-                    p Description
-                    p blah blah blah
-                    form(action='/api/1.0/assignment/' + assignment.ID + '/learner/' + learner.envUserId, method="POST")
-                      input(type='number', name='grade', placeholder='Grade', min=0, max=assignment.graded.maxPoints)
-                      input(type='submit', value='Update')     
+
+      //- each v in [1, 2, 3, 4, 5] 
+      //-   each learner in assignment.learners
+      //-     div.graded
+      //-       section
+      //-         header
+      //-           h3
+      //-             span.title= learner.name
+      //-             if v % 2 == 0
+      //-               span.tag Graded
+      //-             else
+      //-               span.tag No Post
+      //-         article
+      //-           .post
+      //-             img(src='https://scontent-mia1-1.cdninstagram.com/t51.2885-15/e35/14272190_138092099979543_2004957732_n.jpg')
+      //-           .grade
+      //-             div
+      //-               p Description
+      //-               p blah blah blah
+      //-               form(action='/api/1.0/assignment/' + assignment.ID + '/learner/' + learner.envUserId, method="POST")
+      //-                 input(type='number', name='grade', placeholder='Grade', min=0, max=assignment.graded.maxPoints)
+      //-                 input(type='submit', value='Update')     
     footer
       div 
         p Created by Me

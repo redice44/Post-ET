@@ -24,6 +24,7 @@ router.post('/launch', (req, res) => {
   req.session.userId = req.body.lis_person_sourcedid;
   // Hash Environment ID, Course ID, User ID
   const userHash = securityUtil.hashUser(req.session);
+  console.log('user hash', userHash);
   // Hash Environment ID, Course ID, Content ID
   const assignmentHash = securityUtil.hashAssignment(req.session);
   // req.session.assignmentId = assignmentHash;
@@ -63,6 +64,9 @@ router.post('/launch', (req, res) => {
       break;
     case 'Learner':
       redirectUrl = '/learner';
+      req.session.asId = assignmentHash;
+      req.session.userId = userHash;
+      console.log('session', req.session);
       return res.redirect(`${redirectUrl}`);
       break;
     default:

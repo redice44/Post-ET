@@ -13,15 +13,17 @@ const instagramAPI = require('../api/instagram');
 
 router.get('/', instagramAPI.auth.authUser);
 
-router.get('/feed', (req, res) => {
+router.get('/user/:userId/as/:asId', (req, res) => {
   instagramAPI.self.feed(req.session.access_token)
     .then((result) => {
       let locals = {
         media: [],
-        userId: req.session.userId
+        userId: req.params.userId,
+        asId: req.params.asId,
+        username: req.session.instagram.username
       };
 
-      console.log('result', result);
+      // console.log('result', result);
 
       result.data.forEach((d) => {
         let media = {};
@@ -35,9 +37,10 @@ router.get('/feed', (req, res) => {
           console.log('Media is not an image or video. Unhandled', d);
         }
         media.postLink = d.link;
-        media.width = Math.floor(media.width * 0.6);
-        media.height = Math.floor(media.height * 0.6);
+        media.width = Math.floor(media.width * 1);
+        media.height = Math.floor(media.height * 1);
         media.description = d.caption.text;
+        media.id = d.id;
         locals.media.push(media);
       });
 
@@ -49,9 +52,10 @@ router.get('/feed', (req, res) => {
     });
 });
 
-// router.get('/auth_user', instagramAPI.auth.authUser);
+router.get('/auth_user', instagramAPI.auth.authUser);
 
 router.get('/handleauth', (req, res) => {
+  // console.log('session', req.session);
   console.log('error', req.query.error);
   if (req.query.error) {
     console.log('error', req.query.error);
@@ -62,10 +66,13 @@ router.get('/handleauth', (req, res) => {
 
   instagramAPI.auth.getAuthToken(req.query.code)
     .then((result) => {
+      console.log('result', result);
       req.session.access_token = result.access_token;
       req.session.instagram = result.user;
+      req.session.userId = result.userId;
+      req.session.asId = result.asId;
 
-      return res.redirect('/learner/feed');
+      return res.redirect(`/learner/user/${result.userId}/as/${result.asId}`);
     })
     .catch((err) => {
       console.log(err);

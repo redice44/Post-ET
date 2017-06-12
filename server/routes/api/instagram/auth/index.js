@@ -3,15 +3,20 @@ const request = require('superagent');
 const private =  require('../../../../../private');
 
 const instagramDomain = 'https://api.instagram.com/';
-const redirectUri = 'http://localhost/learner/handleauth';
+const redirectUriBase = 'http://localhost/learner/handleauth/';
+let redirectUri;
 
 function authUser (req, res) {
+  redirectUri = redirectUriBase + `?asId=${req.session.asId}&userId=${req.session.userId}`
   const instagramAuthUrl = `${instagramDomain}oauth/authorize/?client_id=${private.instaId}&redirect_uri=${redirectUri}&response_type=code`;
+  // console.log('session', req.session);
   return res.redirect(instagramAuthUrl);
 }
 
 function getAuthToken (code) {
   const accessTokenUrl = `${instagramDomain}oauth/access_token`;
+  console.log('redirect uri', redirectUri);
+  console.log('code', code);
 
   return new Promise((resolve, reject) => {
     request.post(accessTokenUrl)
@@ -25,8 +30,11 @@ function getAuthToken (code) {
         if (err) {
           return reject(err);
         }
-
-        return resolve(JSON.parse(asynRes.text));
+        let result = JSON.parse(asynRes.text);
+        let params = redirectUri.split('?')[1].split('&');
+        result.asId = params[0].split('=')[1];
+        result.userId = params[1].split('=')[1];
+        return resolve(result);
       });
   });
 }

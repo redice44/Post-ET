@@ -3,7 +3,8 @@
   padding: 0;
 }
 html, body {
-  background-color: #eaeaea;
+  /*background-color: #eaeaea;*/
+  background-color: #fff;
   font-family: sans-serif;
 }
 
