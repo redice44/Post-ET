@@ -5,12 +5,25 @@ html
     link(rel='stylesheet', href='/css/learner/feed.css', type='text/css')
   body
     h1 My Feed
-    each m in media
-      div
-        if m.type == 'image'
-          p Image
-          img(src=m.url)
-        else
-          p Video
-          video(src=m.url, controls)
+    #media
+      each m in media
+        section
+          header
+            a(href=m.postLink, target='_blank')= m.postLink
+          article
+            .post(style='height: ' + m.height + 'px')
+              if m.type == 'image'
+                img(src=m.url, width=m.width, height=m.height)
+              else
+                video(src=m.url, width=m.width, height=m.height, controls)
+            .details
+              p= m.description
+              form(action='', method='POST')
+                input(type='hidden', name='url', value=m.url)
+                input(type='hidden', name='type', value=m.type)
+                input(type='hidden', name='width', value=m.width)
+                input(type='hidden', name='height', value=m.height)
+                input(type='hidden', name='postLink', value=m.postLink)
+                input(type='hidden', name='userId', value=userId)
+                input(type='submit', value='Submit Post')
     
