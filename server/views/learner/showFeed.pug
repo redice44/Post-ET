@@ -1,0 +1,16 @@
+doctype html
+html
+  head
+    link(rel='stylesheet', href='/css/core.css', type='text/css')
+    link(rel='stylesheet', href='/css/learner/feed.css', type='text/css')
+  body
+    h1 My Feed
+    each m in media
+      div
+        if m.type == 'image'
+          p Image
+          img(src=m.url)
+        else
+          p Video
+          video(src=m.url, controls)
+    

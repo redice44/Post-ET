@@ -34,40 +34,40 @@ router.post('/launch', (req, res) => {
   switch (role) {
     case 'Instructor':
       redirectUrl = '/instructor';
-      break;
-    case 'Learner':
-      redirectUrl = '/learner';
-      break;
-    default:
-      res.send(`Unsupported role: ${role}`);
-  }
+      let userData = {
+        ID: userHash,
+        role: role,
+        envUserId: req.body.lis_person_sourcedid,
+        name: req.body.lis_person_name_full
+      };
 
-  let userData = {
-    ID: userHash,
-    role: role,
-    envUserId: req.body.lis_person_sourcedid,
-    name: req.body.lis_person_name_full
-  };
+      userAPI.getOrCreate({ ID: userHash }, userData)
+        .then((user) => {
+          assignmentAPI.findOne({ ID: assignmentHash})
+            .then((assignment) => {
+              if (!assignment) {
+                return res.redirect(`${redirectUrl}/as/${assignmentHash}/create`);
+              }
 
-  userAPI.getOrCreate({ ID: userHash }, userData)
-    .then((user) => {
-      assignmentAPI.findOne({ ID: assignmentHash})
-        .then((assignment) => {
-          if (!assignment) {
-            return res.redirect(`${redirectUrl}/as/${assignmentHash}/create`);
-          }
-
-          return res.redirect(`${redirectUrl}/as/${assignmentHash}`);
+              return res.redirect(`${redirectUrl}/as/${assignmentHash}`);
+            })
+            .catch((err) => {
+              console.log(err);
+              return res.status(500).send(err);
+            });
         })
         .catch((err) => {
           console.log(err);
           return res.status(500).send(err);
         });
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.status(500).send(err);
-    });
+      break;
+    case 'Learner':
+      redirectUrl = '/learner';
+      return res.redirect(`${redirectUrl}`);
+      break;
+    default:
+      return res.send(`Unsupported role: ${role}`);
+  }
 });
 
 module.exports = router;
