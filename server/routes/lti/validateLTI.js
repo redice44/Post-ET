@@ -82,7 +82,7 @@ function isValidLTI (params) {
 
   let method = 'POST';
   // let url = 'http://www.bb-lti.com/lti/launch';
-  let url = 'http://localhost/lti/launch';
+  let url = 'http://localhost:14159/lti/launch';
   let parameters = Object.assign({}, params);
   delete parameters.oauth_signature
   let sig = oauthSignature.generate(method, url, parameters, consumerSecret, '', { encodeSignature: false });

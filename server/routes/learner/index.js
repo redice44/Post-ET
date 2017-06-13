@@ -106,7 +106,7 @@ router.get('/authToken', (req, res) => {
 
 router.get('/handleauth', (req, res) => {
   // console.log('session', req.session);
-  console.log('error', req.query.error);
+  // console.log('error', req.query.error);
   if (req.query.error) {
     console.log('error', req.query.error);
     console.log('reason', req.query.error_reason);

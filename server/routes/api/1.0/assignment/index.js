@@ -89,27 +89,27 @@ function create (assignmentData, envId) {
                       console.log(column);
                       assignmentData.graded.columnId = column.id;
                       getOrCreate({ ID: assignmentData.ID }, assignmentData)
-                      .then((as) => {
-                        // update content
-                        let contentData = {
-                          title: as.name,
-                          body: as.description
-                        };
+                        .then((as) => {
+                          // update content
+                          let contentData = {
+                            title: as.name,
+                            body: `<iframe src='http://localhost/api/1.0/assignment/${as.ID}'></iframe>`
+                          };
 
-                        // Update content item in BB.
-                        bbAPI.course.content.update(as.courseId, as.contentId, contentData)
-                          .then(() => {
-                            return resolve(as);
-                          })
-                          .catch((err) => {
-                            console.log(err);
-                            return reject(err);
-                          });
-                      })
-                      .catch((err) => {
-                        console.log(err);
-                        return reject(err);
-                      });
+                          // Update content item in BB.
+                          bbAPI.course.content.update(as.courseId, as.contentId, contentData)
+                            .then(() => {
+                              return resolve(as);
+                            })
+                            .catch((err) => {
+                              console.log(err);
+                              return reject(err);
+                            });
+                        })
+                        .catch((err) => {
+                          console.log(err);
+                          return reject(err);
+                        });
                     })
                     .catch((err) => {
                       return reject(err);
@@ -120,9 +120,11 @@ function create (assignmentData, envId) {
                       // update content
                       let contentData = {
                         title: as.name,
+                        // body: `<p><iframe width="320" height="240" src="http://localhost/api/1.0/assignment/${as.ID}"></iframe></p>`
+                        // body: `http://localhost/api/1.0/assignment/${as.ID}`
                         body: as.description
                       };
-
+                      console.log('content data', contentData);
                       bbAPI.course.content.update(as.courseId, as.contentId, contentData)
                         .then(() => {
                           return resolve(as);

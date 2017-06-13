@@ -3,7 +3,7 @@ const request = require('superagent');
 const private =  require('../../../../../private');
 
 const instagramDomain = 'https://api.instagram.com/';
-const redirectUriBase = 'http://localhost/learner/handleauth/';
+const redirectUriBase = 'http://localhost:14159/learner/handleauth/';
 let redirectUri;
 
 function authUser (req, res) {

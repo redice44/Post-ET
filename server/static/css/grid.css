@@ -1,0 +1,62 @@
+#grid {
+  display: flex;
+  flex-wrap: wrap;
+  font-family: sans-serif;
+  justify-content: center;
+}
+
+.post {
+  padding: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.post > div {
+  /*height: 280px;*/
+  /*width: 280px;*/
+  overflow: hidden;
+}
+
+.cover {
+  position: relative;
+  /*top: -290px;*/
+  /*left: 0;*/
+  /*width: 300px;*/
+  /*height: 300px;*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: transparent;
+  font-size: 20px;
+}
+
+.cover.video {
+  pointer-events: none;
+}
+
+.cover > p {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.cover:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  cursor: default;
+}
+
+
+
+.post img {
+  display: block;
+  /*width: 280px;*/
+  /*margin: 10px;*/
+}
+
+.post video {
+  display: block;
+}
