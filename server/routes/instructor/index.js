@@ -24,18 +24,6 @@ router.get('/as/:asId', (req, res) => {
       };
 
       console.log('assignment', assignment);
-
-      // console.log('learners', assignment.learners);
-      // assignment.learners.forEach(function (learner) {
-      //   console.log(learner.name);
-      //   console.log('assignment id', assignment.ID);
-      //   learner.submissions.forEach(function (submission) {
-      //     console.log('submission id', submission.assignment);
-      //     if (submission.assignment === assignment.ID) {
-      //       console.log(submission.post);
-      //     }
-      //   });
-      // });
       
       return res.render('instructor/show', locals);
     })

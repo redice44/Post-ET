@@ -22,6 +22,18 @@
   border-bottom: 1px solid black;
 }
 
+.post > header .tag {
+  float: right;
+  background-color: #ddd;
+  border: 1px solid black;
+  /*border-radius: 5px;*/
+  padding: 0 5px;
+  font-size: 10px;
+  line-height: 25px;
+  height: 25px;
+  color: red;
+}
+
 .post > article {
   background-color: #eaeaea;
   padding: 20px;

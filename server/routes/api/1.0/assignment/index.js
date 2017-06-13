@@ -174,14 +174,17 @@ function get (assignmentHash) {
             });
 
             assignment.learners.forEach((learner) => {
-              // console.log(learner.name);
-              // console.log('assignment id', assignment.ID);
+              learner.state = 'unsubmitted';
               learner.submissions.forEach((submission) => {
-                // console.log('submission id', submission.assignment);
                 if (submission.assignment === assignment.ID) {
                   learner.post = submission.post;
                 }
               });
+
+              if (learner.post) {
+                learner.state = 'submitted';
+              }
+
               delete learner.submissions;
             });
 
@@ -196,6 +199,7 @@ function get (assignmentHash) {
                         }
                         learner.grade.score = grade.score;
                         learner.grade.feedback = grade.feedback;
+                        learner.state = 'graded';
                       }
                     });
                   });

@@ -23,6 +23,7 @@ html
             section.post(style='width: ' + learner.post.width + 'px')
               header
                 p= learner.name
+                  span.tag= learner.state
               article.media(style='height: ' + learner.post.height + 'px')
                 if learner.post.type === 'image'
                   img(src=learner.post.url, style='width: ' + learner.post.width + 'px; height: ' + learner.post.height + 'px')
@@ -53,6 +54,7 @@ html
             section.post(style='width: 640px')
               header
                 p= learner.name   
+                  span.tag= learner.state
     footer
       div 
         p Created by Me
