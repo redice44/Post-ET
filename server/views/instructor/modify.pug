@@ -2,26 +2,59 @@ doctype html
 html
   head
     link(rel='stylesheet', href='/css/core.css', type='text/css')
+    link(rel='stylesheet', href='/css/post.css', type='text/css')
     //- link(rel='stylesheet', href='/css/instructor/create.css', type='text/css')
   body
-    h1= action + ' Assignment'
-    form#asform(method=httpVerb, action=endpoint)
-      input(type='hidden', name='asId', value=assignment.ID)
-      div
+    #feed
+      section.post
+        header
+          p=assignment.name
+        //- Only allow name change if it isn't a graded assignment. Graded assignments cannot change name. 
+        unless assignment.graded
+          article.grade
+            p.heading Assignment Name:
+            form#asform(method=httpVerb, action=endpoint)
+              input(type='hidden', name='asId', value=assignment.ID)
+              input(type='text', name='name', value=assignment.name)
+        article.grade
+          p.heading Assignment Description
+          textarea(form='asform', name='description')= (assignment.description ? assignment.description : '')
         if assignment.graded
-          p= assignment.name
-        else 
-          label(for='name') Assignment Name
-          input(type='text', name='name', value=assignment.name)
-      div
-        textarea(name='description', placeholder='Assignment Description')= assignment.description
-      div
-        if assignment.graded
-          p= 'Graded: Possible points: ' + assignment.graded.maxPoints
-        else 
-          label(for='graded') Graded: 
-          input(type='checkbox', name='graded')
-          label(for='maxPoints') Max Points
-          input(type='number', name='maxPoints', min=0)
-      div
-        input(type='submit', value= action + ' Assignment')
+          article.grade
+            p.heading Graded Assignment
+            p= 'Possible Points: ' + assignment.graded.maxPoints
+            input(type='hidden', name='graded', value='on')
+          article.grade
+            p.heading Update Possible Points
+            input(form='asform' type='number', name='maxPoints', min=0, value=assignment.graded.maxPoints)            
+        else
+          article.grade
+            p Graded Assignment: 
+              input(form='asform', type='checkbox', name='graded')
+          article.grade
+            p.heading Possble Points:
+            input(form='asform', type='number', name='maxPoints', min=0, value=0)
+        footer
+          input(form='asform', type='submit', value= action + ' Assignment')
+
+
+    //- h1= action + ' Assignment'
+    //- form#asform(method=httpVerb, action=endpoint)
+    //-   div
+    //-     if assignment.graded
+    //-       p= assignment.name
+    //-     else 
+    //-       label(for='name') Assignment Name
+    //-       input(type='text', name='name', value=assignment.name)
+    //-   div
+    //-     textarea(name='description', placeholder='Assignment Description')= assignment.description
+    //-   div
+    //-     if assignment.graded
+    //-       p= 'Graded: Possible points: ' + assignment.graded.maxPoints
+    //-     else 
+    //-       label(for='graded') Graded: 
+    //-       input(type='checkbox', name='graded')
+    //-       label(for='maxPoints') Max Points
+    //-       input(type='number', name='maxPoints', min=0)
+    //-   div
+    //-     input(type='submit', value= action + ' Assignment')

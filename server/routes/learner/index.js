@@ -47,37 +47,46 @@ router.get('/auth', (req, res) => {
 // router.get('/', instagramAPI.auth.authUser);
 
 router.get('/user/:userId/as/:asId', (req, res) => {
-  instagramAPI.self.feed(req.session.access_token)
-    .then((result) => {
-      let locals = {
-        media: [],
-        userId: req.params.userId,
-        asId: req.params.asId,
-        username: req.session.instagram.username
-      };
+  assignmentAPI.get(req.session.asId)
+    .then((assignment) => {
+    instagramAPI.self.feed(req.session.access_token)
+      .then((result) => {
+        let locals = {
+          media: [],
+          userId: req.params.userId,
+          asId: req.params.asId,
+          username: req.session.instagram.username,
+          assignment: assignment
+        };
 
-      // console.log('result', result);
+        // console.log('result', result);
 
-      result.data.forEach((d) => {
-        let media = {};
-        if (d.type === 'image') {
-          media = d.images.standard_resolution;
-          media.type = 'image';
-        } else if (d.type === 'video') {
-          media = d.videos.standard_resolution;
-          media.type = 'video';
-        } else {
-          console.log('Media is not an image or video. Unhandled', d);
-        }
-        media.postLink = d.link;
-        media.width = Math.floor(media.width * 1);
-        media.height = Math.floor(media.height * 1);
-        media.description = d.caption.text;
-        media.id = d.id;
-        locals.media.push(media);
+        result.data.forEach((d) => {
+          let media = {};
+          if (d.type === 'image') {
+            media = d.images.standard_resolution;
+            media.type = 'image';
+          } else if (d.type === 'video') {
+            media = d.videos.standard_resolution;
+            media.type = 'video';
+          } else {
+            console.log('Media is not an image or video. Unhandled', d);
+          }
+          media.postLink = d.link;
+          media.width = Math.floor(media.width * 1);
+          media.height = Math.floor(media.height * 1);
+          media.description = d.caption.text;
+          media.id = d.id;
+          locals.media.push(media);
+        });
+        console.log('locals for showfeed', locals);
+        console.log(locals.assignment.learners[1])
+        return res.render('learner/showFeed', locals);
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).send(err);
       });
-
-      return res.render('learner/showFeed', locals);
     })
     .catch((err) => {
       console.log(err);

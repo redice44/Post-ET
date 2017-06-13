@@ -20,7 +20,8 @@ router.get('/as/:asId', (req, res) => {
   assignmentAPI.get(assignmentHash)
     .then((assignment) => {
       let locals = {
-        assignment: assignment
+        assignment: assignment,
+        embedCode: `<p style="text-align: center;"><iframe width="720" height="400" src="http://localhost:14159/api/1.0/assignment/${assignment.ID}"></iframe></p>`
       };
 
       console.log('assignment', assignment);

@@ -93,7 +93,7 @@ function create (assignmentData, envId) {
                           // update content
                           let contentData = {
                             title: as.name,
-                            body: `<iframe src='http://localhost/api/1.0/assignment/${as.ID}'></iframe>`
+                            // body: `<iframe src='http://localhost/api/1.0/assignment/${as.ID}'></iframe>`
                           };
 
                           // Update content item in BB.

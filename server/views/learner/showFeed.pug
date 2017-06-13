@@ -5,11 +5,24 @@ html
     link(rel='stylesheet', href='/css/post.css', type='text/css')
   body
     #feed
+      section.post
+        header
+          p=assignment.name
+            if assignment.graded
+              span.points Score:
+                br
+                span= '/' + assignment.graded.maxPoints
+        article
+          p.heading Assignment Description
+          p= (assignment.description ? assignment.description : '')
+        //- if assignment.graded
+          article.grade
+            p.heading Graded Assignment
+            p= 'Possible Points: ' + assignment.graded.maxPoints
       each m in media
         section(style='width: ' + m.width + 'px').post
-          header
-            //- a(href=m.postLink, target='_blank')= m.postLink
-            p= username
+          //- header
+          //-   p= username
           article.media(style='height: ' + m.height + 'px')
             if m.type == 'image'
               img(src=m.url, width=m.width, height=m.height)

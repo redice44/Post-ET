@@ -9,6 +9,13 @@ html
         section.post
           header
             p= assignment.name
+              if assignment.graded
+                span.points Score:
+                  br
+                  if assignment.learner.grade
+                    span= assignment.learner.grade.score + '/' + assignment.graded.maxPoints
+                  else
+                    span= '/' + assignment.graded.maxPoints
           article.assignment-description
             p.heading Assignment Description
             if assignment.description
@@ -23,12 +30,12 @@ html
                 video(src=assignment.learner.post.url, style='width: ' + assignment.learner.post.width + 'px; height: ' + assignment.learner.post.height + 'px', controls)
             article.media-description
               p= assignment.learner.post.description
-            if assignment.graded
+            //- if assignment.graded
               article.grade
                 p.heading= 'Possible Points: ' + assignment.graded.maxPoints
                 if assignment.learner.grade
                   p= 'Score: ' + assignment.learner.grade.score
-            if assignment.graded && assignment.learner.grade.feedback
+            if assignment.graded && assignment.learner.grade && assignment.learner.grade.feedback
               article.grade
                 p.heading Feedback:
                 p= assignment.learner.grade.feedback

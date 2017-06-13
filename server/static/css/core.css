@@ -5,17 +5,21 @@
 html, body {
   /*background-color: #eaeaea;*/
   background-color: #fff;
-  font-family: sans-serif;
+  font-family: Arial;
+  font-size: 12px;
 }
 
 body > footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
   background-color: #333;
   color: #ddd;
 }
 
 body > footer > div {
   margin-top: 10px;
-  height: 150px;
+  height: 100px;
   display: flex;
   align-items: center;
   justify-content: center;

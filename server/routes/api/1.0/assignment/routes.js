@@ -71,7 +71,7 @@ router.get('/:asId', (req, res) => {
         }
       ];
 
-      while (posts.length < 9) {
+      while (posts.length < 100) {
         // Populate with placeholder image
         posts.push(placeHolders[Math.floor(Math.random() * placeHolders.length)]);
       }

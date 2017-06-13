@@ -12,19 +12,22 @@
 }
 
 .post > header {
-  background-color: #536774;
+  /*background-color: #536774;*/
+  /*background-color: #4c68d7;*/
+  background-color: #1f3489;
   color: #fff;
   padding: 10px 10px 10px 20px;
   height: 50px;
   font-size: 25px;
   line-height: 30px;
   box-sizing: border-box;
+  border-top: 1px solid black;
   border-bottom: 1px solid black;
 }
 
 .post > header .tag {
   float: right;
-  background-color: #ddd;
+  background-color: #eceef9;
   border: 1px solid black;
   /*border-radius: 5px;*/
   padding: 0 5px;
@@ -32,15 +35,30 @@
   line-height: 25px;
   height: 25px;
   color: red;
+  font-weight: bold;
+}
+
+.post > header .points {
+  float: right;
+  /*background-color: #ddd;*/
+  /*border: 1px solid black;*/
+  /*border-radius: 5px;*/
+  /*padding: 0 5px;*/
+  font-size: 15px;
+  line-height: 15px;
+  /*height: 25px;*/
+  color: white;
+  text-align: center;
 }
 
 .post > article {
-  background-color: #eaeaea;
-  padding: 20px;
+  background-color: #eceef9;
+  padding: 10px;
 }
 
 .post > article .heading {
   padding-bottom: 10px;
+  font-weight: bold;
 }
 
 /* Post States */
@@ -51,6 +69,27 @@
 
 .post.show > article, .post.show > footer {
   display: block;
+}
+
+.post > header svg {
+  position: relative;
+  top: -42px;
+  left: 575px;
+  /*background-color: #2e328e;*/
+  /*border: 1px solid black;*/
+  fill: white;
+  padding: 10px;
+  width: 30px;
+  height: 30px;
+
+}
+
+.post.unsubmitted > header svg {
+  /*fill: red;*/
+}
+
+.post.graded > header svg {
+  /*fill: green;*/
 }
 
 /* Media post: Image or Video content */
@@ -75,7 +114,8 @@
 
 .grade {
   border-top: 1px solid black;
-  background-color: #c5c5c5 !important;
+  /*background-color: #c5c5c5 !important;*/
+  background-color: #eceef9 !important;
   /*padding: 20px;*/
 }
 
@@ -84,11 +124,21 @@
   padding: 5px;
 }
 
-.grade textarea[name='feedback'] {
+.grade input[type='text'], .grade input[type='number'] {
+  width: 200px;
+  padding: 5px;
+}
+
+/*.grade textarea[name='feedback'] {*/
+.grade textarea {
   width: 100%;
   height: 300px;
   box-sizing: border-box;
   padding: 5px;
+}
+
+.grade textarea.embed {
+  height: 75px;
 }
 
 /* Submit */
