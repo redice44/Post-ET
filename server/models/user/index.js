@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+let gradeSchema = new Schema({
+  score: Number,
+  feedback: String
+});
+
 let postSchema = new Schema({
   ID: String,
   postLink: String,
@@ -13,7 +18,8 @@ let postSchema = new Schema({
 
 let submissionSchema = new Schema({
   assignment: String,
-  post: postSchema
+  post: postSchema,
+  grade: gradeSchema
 });
 
 let userSchema = new Schema({

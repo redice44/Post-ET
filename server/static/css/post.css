@@ -6,6 +6,7 @@
 }
 
 .post {
+  width: 640px;
   margin-bottom: 10px;
   border: 1px solid black;
 }
@@ -30,7 +31,7 @@
   width: 600px;
 }
 
-.assignment .description .heading {
+article .heading {
   padding-bottom: 10px;
 }
 

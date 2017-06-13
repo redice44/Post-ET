@@ -23,6 +23,8 @@ router.get('/as/:asId', (req, res) => {
         assignment: assignment
       };
 
+      console.log('assignment', assignment);
+
       // console.log('learners', assignment.learners);
       // assignment.learners.forEach(function (learner) {
       //   console.log(learner.name);

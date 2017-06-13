@@ -165,7 +165,7 @@ function get (assignmentHash) {
       .then((assignment) => {
         userAPI.find({ ID: { $in: assignment.learners }})
           .then((learners) => {
-            console.log('learners are...', learners);
+            // console.log('learners are...', learners);
             assignment = assignment.toObject();
 
             assignment.learners = [];
@@ -191,7 +191,11 @@ function get (assignmentHash) {
                   grades.results.forEach((grade) => {
                     assignment.learners.forEach((learner) => {
                       if (learner.envUserId === grade.userId) {
-                        learner.grade = grade.score;
+                        if (!learner.grade) {
+                          learner.grade = {}
+                        }
+                        learner.grade.score = grade.score;
+                        learner.grade.feedback = grade.feedback;
                       }
                     });
                   });

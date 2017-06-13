@@ -24,7 +24,13 @@ html
                 p= assignment.learner.post.description
             if assignment.graded
               article.graded
-                p= 'Possible Points: ' + assignment.graded.maxPoints
+                p.heading= 'Possible Points: ' + assignment.graded.maxPoints
+                if assignment.learner.grade
+                  p= 'Score: ' + assignment.learner.grade.score
+            if assignment.learner.grade.feedback
+              article.graded
+                p.heading Feedback:
+                p= assignment.learner.grade.feedback
           footer
             if assignment.learner.post
               a(href='/learner/auth') Resubmit Submission

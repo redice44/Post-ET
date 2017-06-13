@@ -100,7 +100,7 @@ router.post('/:asId', (req, res) => {
 
 // Updates a learner's grade for the assignment
 // Probably should use put. 
-router.post('/:asId/learner/:lId', (req, res) => {
+router.post('/:asId/learner/:userId', (req, res) => {
   let grade = {
     score: req.body.grade
   };
@@ -109,9 +109,17 @@ router.post('/:asId/learner/:lId', (req, res) => {
     grade.feedback = req.body.feedback;
   }
 
-  assignmentAPI.updateGrade(req.params.asId, req.params.lId, grade)
+  console.log('grade', grade);
+  userAPI.grade(req.params.userId, req.params.asId, grade)
     .then(() => {
-      return res.redirect(`/instructor/as/${req.params.asId}`);
+      assignmentAPI.updateGrade(req.params.asId, req.body.lId, grade)
+        .then(() => {
+          return res.redirect(`/instructor/as/${req.params.asId}`);
+        })
+        .catch((err) => {
+          console.log(err);
+          return res.status(500).send(err);
+        });
     })
     .catch((err) => {
       console.log(err);

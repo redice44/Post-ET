@@ -37,15 +37,20 @@ function updateUsers (queries, users) {
   return Promise.all(promises);
 }
 
-function submit (userId, asId, submission) {
+function submit (userId, asId, submission, grade) {
   return new Promise((resolve, reject) => {
     findOne({ ID: userId })
       .then((user) => {
+        let sub = {
+          assignment: asId,
+          post: submission,
+        };
+        if (grade) {
+          sub.grade = grade;
+        }
+
         if (!user.submissions) {
-          user.submissions = [{
-            assignment: asId,
-            post: submission
-          }];
+          user.submissions = [sub];
         } else {
           let index = user.submissions.reduce((acc, submission, i) => {
             if (acc < 0) {
@@ -58,12 +63,55 @@ function submit (userId, asId, submission) {
           }, -1);
 
           if (index < 0) {
-            user.submissions.push({
-              assignment: asId,
-              post: submission
-            });
+            user.submissions.push(sub);
           } else {
             user.submissions[index].post = submission;
+            if (grade) {
+              user.submissions[index].grade = grade;
+            }
+          }
+        }
+
+        user.save()
+          .then((user) => {
+            return resolve(user);
+          })
+          .catch((err) => {
+            return reject(err);
+          });
+      })
+      .catch((err) => {
+        return reject(err);
+      });
+  });
+}
+
+function grade (userId, asId, grade) {
+  return new Promise((resolve, reject) => {
+    findOne({ ID: userId })
+      .then((user) => {
+        if (!user.submissions) {
+          return reject('Attempting to grade a submission that does not exist.');
+        } else {
+          let index = user.submissions.reduce((acc, submission, i) => {
+            if (acc < 0) {
+              if (submission.assignment === asId) {
+                return i;
+              }
+            }
+
+            return acc;
+          }, -1);
+
+          if (index < 0) {
+            return reject('Attempting to grade a submission that does not exist.');
+          } else {
+            // user.submissions[index].post = submission;
+            if (grade) {
+              user.submissions[index].grade = grade;
+            } else {
+              return reject('No grade submitted');
+            }
           }
         }
 
@@ -85,5 +133,6 @@ exports.findOne = findOne;
 exports.find = find;
 exports.create = create;
 exports.getOrCreate = getOrCreate;
+exports.grade = grade;
 exports.updateUsers = updateUsers;
 exports.submit = submit;
