@@ -80,13 +80,13 @@ console.log(posts);
 
 posts.forEach((domo) => {
   if (!domo.classes.includes('unsubmitted')) {
-    domo.html.addEventListener('click', toggleVisible);
+    domo.get('header').html.addEventListener('click', toggleVisible);
   }
 });
 
 function toggleVisible (e) {
   console.log(e.currentTarget);
-  new __WEBPACK_IMPORTED_MODULE_0_dom_object__["a" /* default */](e.currentTarget).toggleClass('hide').toggleClass('show');
+  new __WEBPACK_IMPORTED_MODULE_0_dom_object__["a" /* default */](e.currentTarget.parentElement).toggleClass('hide').toggleClass('show');
 }
 
 

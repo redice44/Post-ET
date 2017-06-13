@@ -5,11 +5,11 @@ console.log(posts);
 
 posts.forEach((domo) => {
   if (!domo.classes.includes('unsubmitted')) {
-    domo.html.addEventListener('click', toggleVisible);
+    domo.get('header').html.addEventListener('click', toggleVisible);
   }
 });
 
 function toggleVisible (e) {
   console.log(e.currentTarget);
-  new Domo(e.currentTarget).toggleClass('hide').toggleClass('show');
+  new Domo(e.currentTarget.parentElement).toggleClass('hide').toggleClass('show');
 }
