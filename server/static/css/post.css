@@ -24,56 +24,52 @@
 
 .post > article {
   background-color: #eaeaea;
-}
-
-.assignment {
   padding: 20px;
-  width: 600px;
 }
 
-article .heading {
+.post > article .heading {
   padding-bottom: 10px;
 }
 
-.submission > .details {
-  padding: 20px;
+/* Media post: Image or Video content */
+
+.media {
+  padding: 0 !important;
 }
 
-.grading {
+/* Media Description */
+
+.media-description {
+  /*padding: 20px;*/
+}
+
+/* Assignments */
+
+.assignment-description {
+  /*padding: 20px;*/
+}
+
+/* Grading */
+
+.grade {
   border-top: 1px solid black;
-  padding: 20px;
+  background-color: #c5c5c5 !important;
+  /*padding: 20px;*/
 }
 
-.grading > .score {
-  margin-bottom: 20px;
-}
-
-.grading input[name='grade'] {
+.grade input[name='grade'] {
   width: 200px;
+  padding: 5px;
 }
 
-.grading textarea[name='feedback'] {
+.grade textarea[name='feedback'] {
   width: 100%;
   height: 300px;
-}
-
-.graded {
-  border-top: 1px solid black;
-  padding: 20px;
-}
-
-.post > footer {
- /* width: 100%;
-  background-color: #2308a7;
-  color: #fff;
-  border-top: 1px solid black;
-  padding: 10px;
   box-sizing: border-box;
-  text-align: center;
-  height: 50px;
-  line-height: 30px;
-  font-size: 20px;*/
+  padding: 5px;
 }
+
+/* Submit */
 
 .post > footer input[type='submit'] {
   background-color: #2308a7;

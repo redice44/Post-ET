@@ -4,40 +4,6 @@ html
     link(rel='stylesheet', href='/css/core.css', type='text/css')
     link(rel='stylesheet', href='/css/post.css', type='text/css')
   body
-    //- h1= 'Assignment: ' + assignment.name
-    //- p
-    //-   a(href='/instructor/as/' + assignment.ID + '/edit') Edit
-    //- p Description
-    //- p= assignment.description
-    //- if assignment.graded
-    //-   p= 'Possible Points: ' + assignment.graded.maxPoints
-    //- p Students
-    //- table#gradebook
-    //-   thead
-    //-     tr
-    //-       td Student Name
-    //-       td temp submit
-    //-       td Submission
-    //-       if assignment.graded
-    //-         td Grade
-    //-         td Set Grade
-    //-   tbody
-    //-     each learner in assignment.learners
-    //-       tr
-    //-         td= learner.name
-    //-         td
-    //-           form(action='/api/1.0/user/' + learner.ID + '/as/' + assignment.ID, method="POST")
-    //-             input(type='text', name='submission', placeholder='Post Info')
-    //-             input(type='submit', value='Post')
-    //-         td
-    //-           if learner.post
-    //-             p= learner.post
-    //-         if assignment.graded
-    //-           td= learner.grade
-    //-           td
-    //-             form(action='/api/1.0/assignment/' + assignment.ID + '/learner/' + learner.envUserId, method="POST")
-    //-               input(type='number', name='grade', placeholder='Grade', min=0, max=assignment.graded.maxPoints)
-    //-               input(type='submit', value='Update')
     #content
       p
         a(href='/instructor/as/' + assignment.ID + '/edit') Edit
@@ -45,108 +11,48 @@ html
         section.post
           header
             p= assignment.name
-          article.assignment
-            .description
-              p= assignment.description
-            if assignment.graded
-              .graded
-                p= 'Possible Points: ' + assignment.graded.maxPoints
+          article.assignment-description
+            p.heading Assignment Description
+            p= assignment.description
+          if assignment.graded
+            article.grade
+              p= 'Possible Points: ' + assignment.graded.maxPoints
           //- footer
         each learner in assignment.learners
           if learner.post
             section.post(style='width: ' + learner.post.width + 'px')
               header
                 p= learner.name
-              article.submission
-                .media(style='height: ' + learner.post.height + 'px')
-                  if learner.post.type === 'image'
-                    img(src=learner.post.url, style='width: ' + learner.post.width + 'px; height: ' + learner.post.height + 'px')
-                  else
-                    video(src=learner.post.url, style='width: ' + learner.post.width + 'px; height: ' + learner.post.height + 'px', controls)
-                .details
-                  p= learner.post.description
+              article.media(style='height: ' + learner.post.height + 'px')
+                if learner.post.type === 'image'
+                  img(src=learner.post.url, style='width: ' + learner.post.width + 'px; height: ' + learner.post.height + 'px')
+                else
+                  video(src=learner.post.url, style='width: ' + learner.post.width + 'px; height: ' + learner.post.height + 'px', controls)
+              article.media-description
+                p= learner.post.description
               if assignment.graded
-                article.grading
-                  .score
-                    p Assignment Grade
-                    form(id=learner.ID, action='/api/1.0/assignment/' + assignment.ID + '/learner/' + learner.ID, method='POST')
-                      input(type='hidden', name='lId', value=learner.envUserId)
-                      if learner.grade
-                        input(type='number', name='grade', placeholder='Grade', min=0, max=assignment.graded.maxPoints, value=learner.grade.score)
-                      else
-                        input(type='number', name='grade', placeholder='Grade', min=0, max=assignment.graded.maxPoints)
-                  .feedback
-                    p Assignment Feedback
+                article.grade
+                  p.heading Assignment Grade
+                  form(id=learner.ID, action='/api/1.0/assignment/' + assignment.ID + '/learner/' + learner.ID, method='POST')
+                    input(type='hidden', name='lId', value=learner.envUserId)
                     if learner.grade
-                      textarea(form=learner.ID, name='feedback')= learner.grade.feedback
+                      input(type='number', name='grade', placeholder='Grade', min=0, max=assignment.graded.maxPoints, value=learner.grade.score)
                     else
-                      textarea(form=learner.ID, name='feedback')
+                      input(type='number', name='grade', placeholder='Grade', min=0, max=assignment.graded.maxPoints)
+                article.grade
+                  p.heading Assignment Feedback
+                  if learner.grade
+                    textarea(form=learner.ID, name='feedback')= learner.grade.feedback
+                  else
+                    textarea(form=learner.ID, name='feedback')
+              if assignment.graded
                 footer
-                  input(form=learner.ID, type='submit', value='Submit Post')
+                  input(form=learner.ID, type='submit', value='Submit Grade')
 
           else
             section.post(style='width: 640px')
               header
-                p= learner.name
-    //- .assignment
-    //-   h1= assignment.name
-    //-   div
-    //-     p= assignment.description
-    //- #posts
-    //-   each learner in assignment.learners
-    //-     if learner.post
-    //-       div.needsGrading
-    //-         section
-    //-           header
-    //-             h3
-    //-               span.title= learner.name
-    //-                 span.tag New
-    //-                 span.tag No Post
-    //-           article(style='height: ' + learner.post.height + 'px;')
-    //-             .post
-    //-               if learner.post.type
-    //-                 if learner.post.type == 'image'
-    //-                   img(src=learner.post.url, style='width: ' + learner.post.width + 'px; height: ' + learner.post.height + 'px;')
-    //-                 else
-    //-                   video(src=learner.post.url, width=learner.post.width, height=learner.post.height, controls)
-    //-             .grade
-    //-               if learner.post.description
-    //-                 div
-    //-                   p= learner.post.description
-    //-               div
-    //-                 if assignment.graded
-    //-                   form(action='/api/1.0/assignment/' + assignment.ID + '/learner/' + learner.envUserId, method="POST")
-    //-                     input(type='number', name='grade', placeholder='Grade', min=0, max=assignment.graded.maxPoints)
-    //-                     input(type='submit', value='Update') 
-    //-     else
-    //-       div.graded
-    //-         section
-    //-           header
-    //-             h3
-    //-               span.title= learner.name
-    //-                 span.tag No Post
-
-      //- each v in [1, 2, 3, 4, 5] 
-      //-   each learner in assignment.learners
-      //-     div.graded
-      //-       section
-      //-         header
-      //-           h3
-      //-             span.title= learner.name
-      //-             if v % 2 == 0
-      //-               span.tag Graded
-      //-             else
-      //-               span.tag No Post
-      //-         article
-      //-           .post
-      //-             img(src='https://scontent-mia1-1.cdninstagram.com/t51.2885-15/e35/14272190_138092099979543_2004957732_n.jpg')
-      //-           .grade
-      //-             div
-      //-               p Description
-      //-               p blah blah blah
-      //-               form(action='/api/1.0/assignment/' + assignment.ID + '/learner/' + learner.envUserId, method="POST")
-      //-                 input(type='number', name='grade', placeholder='Grade', min=0, max=assignment.graded.maxPoints)
-      //-                 input(type='submit', value='Update')     
+                p= learner.name   
     footer
       div 
         p Created by Me

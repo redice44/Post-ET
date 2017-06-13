@@ -10,14 +10,13 @@ html
           header
             //- a(href=m.postLink, target='_blank')= m.postLink
             p= username
-          article.submission
-            .media(style='height: ' + m.height + 'px')
-              if m.type == 'image'
-                img(src=m.url, width=m.width, height=m.height)
-              else
-                video(src=m.url, width=m.width, height=m.height, controls)
-            .details
-              p= m.description
+          article.media(style='height: ' + m.height + 'px')
+            if m.type == 'image'
+              img(src=m.url, width=m.width, height=m.height)
+            else
+              video(src=m.url, width=m.width, height=m.height, controls)
+          article.media-description
+            p= m.description
           footer
             form(action='/api/1.0/user/' + userId + '/as/' + asId, method='POST')
               input(type='hidden', name='url', value=m.url)
