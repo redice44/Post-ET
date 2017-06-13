@@ -20,7 +20,7 @@ html
           //- footer
         each learner in assignment.learners
           if learner.post
-            section.post(style='width: ' + learner.post.width + 'px')
+            section(class='post ' + learner.state + ' ' + (learner.state === 'graded' ? 'hide' : 'show'), style='width: ' + learner.post.width + 'px')
               header
                 p= learner.name
                   span.tag= learner.state
@@ -51,10 +51,11 @@ html
                   input(form=learner.ID, type='submit', value='Submit Grade')
 
           else
-            section.post(style='width: 640px')
+            section(class='post ' + learner.state, style='width: 640px')
               header
                 p= learner.name   
                   span.tag= learner.state
     footer
       div 
         p Created by Me
+    script(src='/js/collapsePost.js')

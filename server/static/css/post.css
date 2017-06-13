@@ -43,6 +43,16 @@
   padding-bottom: 10px;
 }
 
+/* Post States */
+
+.post.hide > article, .post.hide > footer {
+  display: none;
+}
+
+.post.show > article, .post.show > footer {
+  display: block;
+}
+
 /* Media post: Image or Video content */
 
 .media {

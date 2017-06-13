@@ -9,10 +9,12 @@ html
         section.post
           header
             p= assignment.name
-          if assignment.description
-            article.assignment-description
-              p.heading Assignment Description
+          article.assignment-description
+            p.heading Assignment Description
+            if assignment.description
               p= assignment.description
+            else
+              p No assignment description
           if assignment.learner.post
             article.media(style='height: ' + assignment.learner.post.height + 'px')
               if assignment.learner.post.type === 'image'
@@ -32,6 +34,6 @@ html
                 p= assignment.learner.grade.feedback
           footer
             if assignment.learner.post
-              a(href='/learner/auth') Resubmit Submission
+              a(href='/learner/auth_user', target='_blank') Resubmit Submission
             else 
-              a(href='/learner/auth') Start Submission
+              a(href='/learner/auth_user', target='_blank') Start Submission

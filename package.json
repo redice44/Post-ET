@@ -13,6 +13,7 @@
   "license": "GPL-3.0",
   "dependencies": {
     "body-parser": "^1.17.2",
+    "dom-object": "https://github.com/redice44/dom-object#v0.0.7",
     "express": "^4.15.3",
     "express-session": "^1.15.3",
     "mongodb": "^2.2.28",
