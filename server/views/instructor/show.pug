@@ -65,6 +65,18 @@ html
                     video(src=learner.post.url, style='width: ' + learner.post.width + 'px; height: ' + learner.post.height + 'px', controls)
                 .details
                   p= learner.post.description
+              if assignment.graded
+                article.grading
+                  .score
+                    p Assignment Grade
+                    form(id=learner.ID, action='/api/1.0/assignment/' + assignment.ID + '/learner/' + learner.envUserId, method='POST')
+                      input(type='number', name='grade', placeholder='Grade', min=0, max=assignment.graded.maxPoints)
+                  .feedback
+                    p Assignment Feedback
+                    textarea(form=learner.ID, name='feedback')
+                footer
+                  input(form=learner.ID, type='submit', value='Submit Post')
+
           else
             section.post(style='width: 640px')
               header

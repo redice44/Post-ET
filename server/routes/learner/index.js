@@ -4,10 +4,43 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 
+const assignmentAPI = require('../api/1.0/assignment');
 const instagramAPI = require('../api/instagram');
 
 router.get('/', (req, res) => {
   console.log(`Session ID: ${req.session.userId}`);
+  console.log(req.session);
+  assignmentAPI.get(req.session.asId)
+    .then((assignment) => {
+      if (!assignment) {
+        console.log('No assignment');
+        // idk. The assignment should be created. How to handle?
+        return res.send('no assignment?????');
+      }
+
+      assignment.learners.forEach((learner) => {
+        if (learner.ID === req.session.userId) {
+          assignment.learner = learner;
+        }
+      });
+      delete assignment.learners;
+      console.log('assignment', assignment);
+
+      let locals = {
+        assignment: assignment
+      };
+
+      return res.render('learner/showAs', locals);
+      // return res.redirect(`/learner/user/${req.session.userId}/as/${req.session.asId}`)
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).send(err);
+    });
+
+});
+
+router.get('/auth', (req, res) => {
   return res.render('learner/showAuth');
 });
 

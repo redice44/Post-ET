@@ -11,9 +11,22 @@ html
             p= assignment.name
           article.assignment
             .description
+              p.heading Assignment Description
               p= assignment.description
+          if assignment.learner.post
+            article.submission
+              .media(style='height: ' + assignment.learner.post.height + 'px')
+                if assignment.learner.post.type === 'image'
+                  img(src=assignment.learner.post.url, style='width: ' + assignment.learner.post.width + 'px; height: ' + assignment.learner.post.height + 'px')
+                else
+                  video(src=assignment.learner.post.url, style='width: ' + assignment.learner.post.width + 'px; height: ' + assignment.learner.post.height + 'px', controls)
+              .details
+                p= assignment.learner.post.description
             if assignment.graded
-              .graded
+              article.graded
                 p= 'Possible Points: ' + assignment.graded.maxPoints
           footer
-            a(href='/learner/auth') Start Submission
+            if assignment.learner.post
+              a(href='/learner/auth') Resubmit Submission
+            else 
+              a(href='/learner/auth') Start Submission

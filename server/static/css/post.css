@@ -25,26 +25,53 @@
   background-color: #eaeaea;
 }
 
-.post > .assignment {
+.assignment {
   padding: 20px;
   width: 600px;
 }
 
-.post > .submission > .details {
+.assignment .description .heading {
+  padding-bottom: 10px;
+}
+
+.submission > .details {
+  padding: 20px;
+}
+
+.grading {
+  border-top: 1px solid black;
+  padding: 20px;
+}
+
+.grading > .score {
+  margin-bottom: 20px;
+}
+
+.grading input[name='grade'] {
+  width: 200px;
+}
+
+.grading textarea[name='feedback'] {
+  width: 100%;
+  height: 300px;
+}
+
+.graded {
+  border-top: 1px solid black;
   padding: 20px;
 }
 
 .post > footer {
-  width: 100%;
+ /* width: 100%;
   background-color: #2308a7;
   color: #fff;
   border-top: 1px solid black;
-  /*padding: 10px;*/
+  padding: 10px;
   box-sizing: border-box;
   text-align: center;
   height: 50px;
   line-height: 30px;
-  font-size: 20px;
+  font-size: 20px;*/
 }
 
 .post > footer input[type='submit'] {
@@ -58,5 +85,23 @@
 }
 
 .post > footer input:hover {
+  background-color: #2b0ad0;
+  cursor: pointer;
+}
+
+.post > footer a {
+  background-color: #2308a7;
+  border: 0;
+  height: 50px;
+  width: 100%;
+  line-height: 50px;
+  font-size: 20px;
+  color: #fff;
+  display: block;
+  text-align: center;
+  text-decoration: none;5
+}
+
+.post > footer a:hover {
   background-color: #2b0ad0;
 }

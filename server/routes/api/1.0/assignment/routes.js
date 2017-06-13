@@ -105,6 +105,10 @@ router.post('/:asId/learner/:lId', (req, res) => {
     score: req.body.grade
   };
 
+  if (req.body.feedback) {
+    grade.feedback = req.body.feedback;
+  }
+
   assignmentAPI.updateGrade(req.params.asId, req.params.lId, grade)
     .then(() => {
       return res.redirect(`/instructor/as/${req.params.asId}`);

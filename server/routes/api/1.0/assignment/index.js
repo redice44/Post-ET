@@ -182,6 +182,7 @@ function get (assignmentHash) {
                   learner.post = submission.post;
                 }
               });
+              delete learner.submissions;
             });
 
             if (assignment.graded && assignment.graded.columnId) {
