@@ -12,17 +12,16 @@ html
               span.points Score:
                 br
                 span= '/' + assignment.graded.maxPoints
-        article
-          p.heading Assignment Description
-          p= (assignment.description ? assignment.description : '')
-        //- if assignment.graded
-          article.grade
-            p.heading Graded Assignment
-            p= 'Possible Points: ' + assignment.graded.maxPoints
+        if assignment.description
+          article
+            p.heading Assignment Description
+            p= assignment.description
+        if assignment.dueDate
+          article
+            p.heading Due Date:
+            p= assignment.dueDate.toDateString()
       each m in media
         section(style='width: ' + m.width + 'px').post
-          //- header
-          //-   p= username
           article.media(style='height: ' + m.height + 'px')
             if m.type == 'image'
               img(src=m.url, width=m.width, height=m.height)

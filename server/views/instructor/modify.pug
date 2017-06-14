@@ -3,7 +3,11 @@ html
   head
     link(rel='stylesheet', href='/css/core.css', type='text/css')
     link(rel='stylesheet', href='/css/post.css', type='text/css')
-    //- link(rel='stylesheet', href='/css/instructor/create.css', type='text/css')
+    link(rel='stylesheet', href='/lib/css/datepicker.min.css', type='text/css')
+
+    //- script(src='/lib/js/jquery-3.2.1.min.js')
+    //- script(src='/lib/js/datepicker.min.js')
+    //- script(src='/js/datepicker.js')
   body
     #feed
       section.post
@@ -24,37 +28,24 @@ html
             p.heading Graded Assignment
             p= 'Possible Points: ' + assignment.graded.maxPoints
             input(type='hidden', name='graded', value='on')
-          article.grade
-            p.heading Update Possible Points
-            input(form='asform' type='number', name='maxPoints', min=0, value=assignment.graded.maxPoints)            
+          article.grade(style='display: flex;')
+            div
+              p.heading Update Possible Points
+              input(form='asform' type='number', name='maxPoints', min=0, value=assignment.graded.maxPoints)
+            div
+              p.heading Due Date:
+              input(form='asform', data-toggle='datepicker' name='dueDate')
         else
           article.grade
-            p Graded Assignment: 
+            p.heading Graded Assignment: 
               input(form='asform', type='checkbox', name='graded')
-          article.grade
-            p.heading Possble Points:
-            input(form='asform', type='number', name='maxPoints', min=0, value=0)
+          article.grade(style='display: flex;')
+            div(style='flex-grow: 1;')
+              p.heading Possible Points:
+              input(form='asform', type='number', name='maxPoints', min=0, value=0)
+            div
+              p.heading Due Date:
+              input(form='asform', data-toggle='datepicker' name='dueDate')
         footer
           input(form='asform', type='submit', value= action + ' Assignment')
-
-
-    //- h1= action + ' Assignment'
-    //- form#asform(method=httpVerb, action=endpoint)
-    //-   div
-    //-     if assignment.graded
-    //-       p= assignment.name
-    //-     else 
-    //-       label(for='name') Assignment Name
-    //-       input(type='text', name='name', value=assignment.name)
-    //-   div
-    //-     textarea(name='description', placeholder='Assignment Description')= assignment.description
-    //-   div
-    //-     if assignment.graded
-    //-       p= 'Graded: Possible points: ' + assignment.graded.maxPoints
-    //-     else 
-    //-       label(for='graded') Graded: 
-    //-       input(type='checkbox', name='graded')
-    //-       label(for='maxPoints') Max Points
-    //-       input(type='number', name='maxPoints', min=0)
-    //-   div
-    //-     input(type='submit', value= action + ' Assignment')
+  script(src='/js/datepicker.js')

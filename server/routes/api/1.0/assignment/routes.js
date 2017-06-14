@@ -104,13 +104,20 @@ router.get('/:asId', (req, res) => {
 
 // Creates new assignment
 router.post('/', (req, res) => {
-  console.log(req.body);
+  console.log('creating new assignment', req.body);
+
+  // Date is sent mm-dd-yyyy
+  let dueDate = req.body.dueDate.split('-');
+  dueDate = new Date(`${dueDate[2]}-${dueDate[0]}-${dueDate[1]}T23:59:00`);
+  dueDate.setHours(dueDate.getHours() + Math.floor(dueDate.getTimezoneOffset() / 60));
+
   let assignmentData = {
     ID: req.body.asId,
     name: req.body.name,
     description: req.body.description,
     courseId: req.session.courseId,
     contentId: req.session.contentId,
+    dueDate: dueDate
   };
 
   if (req.body.graded) {
@@ -125,33 +132,16 @@ router.post('/', (req, res) => {
   console.log('assignment data');
   console.log(assignmentData);
 
-
-
-  // bbAPI.course.grades.deleteColumn(assignmentData.courseId)
-  //   .then((asyncRes) => {
-
-
-
-      assignmentAPI.create(assignmentData, req.session.envId)
-        .then((assignment) => {
-          // redirect for now
-          // update blackboard content item
-          return res.redirect(`/instructor/as/${assignment.ID}/`);
-        })
-        .catch((err) => {
-          console.log(err);
-          return res.status(500).send(err);
-        });
-
-
-
-
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    //   return res.status(500).send(err);
-    // });
-
+  assignmentAPI.create(assignmentData, req.session.envId)
+    .then((assignment) => {
+      // redirect for now
+      // update blackboard content item
+      return res.redirect(`/instructor/as/${assignment.ID}/`);
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.status(500).send(err);
+    });
 });
 
 // Updates an assignment

@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 let gradedSchema = new Schema({
   columnId: String,
-  maxPoints: Number
+  maxPoints: Number,
 });
 
 let assignmentSchema = new Schema({
@@ -13,6 +13,7 @@ let assignmentSchema = new Schema({
   courseId: String,
   contentId: String,
   graded: gradedSchema,
+  dueDate: Date,
   learners: [String]
 });
 

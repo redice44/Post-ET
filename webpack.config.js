@@ -4,7 +4,8 @@ var webpack = require('webpack');
 module.exports = {
   entry: {
     // nameOfOutputFile: './path/to/file.js'
-    collapsePost: './src/js/collapsePost.js'
+    collapsePost: './src/js/collapsePost.js',
+    datepicker: './src/js/datepicker.js'
   },
   output: {
     path: path.resolve(__dirname, 'server/static/js'),

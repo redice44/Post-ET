@@ -22,6 +22,11 @@ html
               p= assignment.description
             else
               p No assignment description
+          if assignment.dueDate
+            article.grade
+              p.heading Due Date:
+              //- Handle locales at some other time. 
+              p= assignment.dueDate.toDateString()
           if assignment.learner.post
             article.media(style='height: ' + assignment.learner.post.height + 'px')
               if assignment.learner.post.type === 'image'
@@ -30,17 +35,15 @@ html
                 video(src=assignment.learner.post.url, style='width: ' + assignment.learner.post.width + 'px; height: ' + assignment.learner.post.height + 'px', controls)
             article.media-description
               p= assignment.learner.post.description
-            //- if assignment.graded
-              article.grade
-                p.heading= 'Possible Points: ' + assignment.graded.maxPoints
-                if assignment.learner.grade
-                  p= 'Score: ' + assignment.learner.grade.score
             if assignment.graded && assignment.learner.grade && assignment.learner.grade.feedback
               article.grade
                 p.heading Feedback:
                 p= assignment.learner.grade.feedback
           footer
-            if assignment.learner.post
-              a(href='/learner/auth_user', target='_blank') Resubmit Submission
-            else 
-              a(href='/learner/auth_user', target='_blank') Start Submission
+            if assignment.dueDate && new Date(assignment.dueDate) < Date.now()
+              p Deadline has past.
+            else
+              if assignment.learner.post
+                a(href='/learner/auth_user', target='_blank') Resubmit Submission
+              else 
+                a(href='/learner/auth_user', target='_blank') Start Submission

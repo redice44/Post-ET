@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -71,32 +71,8 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_dom_object__ = __webpack_require__(1);
-
-
-let posts = new __WEBPACK_IMPORTED_MODULE_0_dom_object__["a" /* default */](document.getElementById('feed')).get('section.post');
-console.log(posts);
-
-posts.forEach((domo) => {
-  if (!domo.classes.includes('unsubmitted')) {
-    domo.get('header').html.addEventListener('click', toggleVisible);
-  }
-});
-
-function toggleVisible (e) {
-  console.log(e.currentTarget);
-  new __WEBPACK_IMPORTED_MODULE_0_dom_object__["a" /* default */](e.currentTarget.parentElement).toggleClass('hide').toggleClass('show');
-}
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__single__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__array__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__single__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__array__ = __webpack_require__(5);
 /*
   This code is meant to be run in a browser. Compatability table to come. 
 */
@@ -404,12 +380,13 @@ DOMObject.cast = function (domo) {
 
 
 /***/ }),
+/* 1 */,
 /* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_emmet_parser__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__DOMObject__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_emmet_parser__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__DOMObject__ = __webpack_require__(0);
 
 
 
@@ -746,7 +723,8 @@ DOMOBase.prototype.__toArray__ = function (nodeList) {
 
 
 /***/ }),
-/* 4 */
+/* 4 */,
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -995,7 +973,7 @@ DOMOArray.prototype.get = function (query, options) {
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1123,11 +1101,11 @@ DOMOSingle.prototype.get = function (query, options) {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__tokenize__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__tokenize__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ops__ = __webpack_require__(3);
 
 
@@ -1612,7 +1590,7 @@ function isOp(token) {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1731,6 +1709,30 @@ function condenseMultiplyToken(tokens, index) {
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (tokenize);
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_dom_object__ = __webpack_require__(0);
+
+
+let posts = new __WEBPACK_IMPORTED_MODULE_0_dom_object__["a" /* default */](document.getElementById('feed')).get('section.post');
+console.log(posts);
+
+posts.forEach((domo) => {
+  if (!domo.classes.includes('unsubmitted')) {
+    domo.get('header').html.addEventListener('click', toggleVisible);
+  }
+});
+
+function toggleVisible (e) {
+  console.log(e.currentTarget);
+  new __WEBPACK_IMPORTED_MODULE_0_dom_object__["a" /* default */](e.currentTarget.parentElement).toggleClass('hide').toggleClass('show');
+}
 
 
 /***/ })
