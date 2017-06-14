@@ -1,0 +1,48 @@
+#legend {
+  position: fixed;
+  top: 0;
+  right: 0;
+  margin: 20px;
+  border: 1px solid black;
+  border-top: 0;
+}
+
+#legend > ul {
+  list-style: none;
+}
+
+#legend > ul > li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid black;
+  background-color: #eceef9;
+}
+/*
+#legend > ul > li:first-child {
+  background-color: #c9ceee;
+  border-bottom: 1px solid black;
+}
+*/
+#legend > ul > li > div {
+  padding: 5px 10px;
+}
+/*
+#legend > ul > li:first-child > div {
+  padding: 10px;
+  font-size: 20px;
+}
+*/
+#legend .key {
+  width: 50px;
+  text-align: center;
+  font-weight: bold;
+}
+
+#legend .icon {
+  background-color: #1f3489;
+}
+
+#legend svg {
+  fill: white;
+}
