@@ -30,7 +30,7 @@ router.get('/', (req, res) => {
         assignment: assignment
       };
 
-      return res.render('learner/showAs', locals);
+      return res.render('learner/assignment', locals);
       // return res.redirect(`/learner/user/${req.session.userId}/as/${req.session.asId}`)
     })
     .catch((err) => {
@@ -79,9 +79,17 @@ router.get('/user/:userId/as/:asId', (req, res) => {
           media.id = d.id;
           locals.media.push(media);
         });
+
+        assignment.learners.forEach((learner) => {
+          if (learner.ID === req.session.userId) {
+            assignment.learner = learner;
+          }
+        });
+
+        delete assignment.learners;
+
         console.log('locals for showfeed', locals);
-        console.log(locals.assignment.learners[1])
-        return res.render('learner/showFeed', locals);
+        return res.render('learner/feed', locals);
       })
       .catch((err) => {
         console.log(err);

@@ -5,7 +5,8 @@ module.exports = {
   entry: {
     // nameOfOutputFile: './path/to/file.js'
     collapsePost: './src/js/collapsePost.js',
-    datepicker: './src/js/datepicker.js'
+    datepicker: './src/js/datepicker.js',
+    imageDisplay: './src/js/imageDisplay.js'
   },
   output: {
     path: path.resolve(__dirname, 'server/static/js'),

@@ -1,0 +1,10 @@
+extends ../layout
+
+block styles
+  link(rel='stylesheet', href='/css/post.css', type='text/css')
+
+block content
+  #feed
+    include ../assignment
+    each post in media
+      include ../post

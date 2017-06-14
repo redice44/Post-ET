@@ -1,0 +1,6 @@
+section.post
+  if !post && assignment && assignment.learner && assignment.learner.post
+    - post = assignment.learner.post
+  include ./includes/asPost
+  - post = null
+  include ./includes/asSubmit
