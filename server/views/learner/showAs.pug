@@ -24,7 +24,7 @@ html
               p No assignment description
           if assignment.dueDate
             article.grade
-              p.heading Due Date:
+              p.heading Due Date
               //- Handle locales at some other time. 
               p= assignment.dueDate.toDateString()
           if assignment.learner.post
@@ -37,7 +37,7 @@ html
               p= assignment.learner.post.description
             if assignment.graded && assignment.learner.grade && assignment.learner.grade.feedback
               article.grade
-                p.heading Feedback:
+                p.heading Feedback
                 p= assignment.learner.grade.feedback
           footer
             if assignment.dueDate && new Date(assignment.dueDate) < Date.now()

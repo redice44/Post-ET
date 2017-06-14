@@ -24,6 +24,33 @@ router.get('/as/:asId', (req, res) => {
         embedCode: `<p style="text-align: center;"><iframe width="720" height="400" src="http://localhost:14159/api/1.0/assignment/${assignment.ID}"></iframe></p>`
       };
 
+      // Sort order is. submitted < graded < unsubmitted
+      assignment.learners.sort((a, b) => {
+        switch(a.state) {
+          case 'submitted':
+            if (b.state === 'submitted') {
+              return 0;
+            }
+            return -1;
+          case 'graded':
+            if (b.state === 'graded') {
+              return 0;
+            } else if (b.state === 'submitted') {
+              return 1;
+            }
+            return -1;
+          case 'unsubmitted':
+            if (b.state === 'unsubmitted') {
+              return 0;
+            }
+            return 1;
+          default:
+            console.log(`Unexpected state: ${a.state}.`);
+            // Do not alter sort order
+            return 0;
+        }
+      });
+
       console.log('assignment', assignment);
       
       return res.render('instructor/show', locals);

@@ -18,7 +18,7 @@ html
             p= assignment.description
         if assignment.dueDate
           article
-            p.heading Due Date:
+            p.heading Due Date
             p= assignment.dueDate.toDateString()
       each m in media
         section(style='width: ' + m.width + 'px').post
