@@ -8,10 +8,6 @@ function hashSHA256 (str) {
 }
 
 function hashUser (params) {
-  console.log('user hashing...');
-  console.log(params.envId);
-  console.log(params.courseId);
-  console.log(params.userId);
   return hashSHA256(`${params.envId}${params.courseId}${params.userId}`);
 }
 
