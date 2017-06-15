@@ -14,7 +14,7 @@ const learnerRoutes = require('./routes/learner');
 const apiRoutes = require('./routes/api/1.0');
 
 const private = require('../private/index.js');
-const appPort = 14159;
+const appConfig = require('./config');
 
 app.use(express.static(path.join(__dirname, 'static')));
 app.set('view engine', 'pug');
@@ -38,12 +38,12 @@ app.use('/instructor', instructorRoutes);
 app.use('/api/1.0/', apiRoutes);
 
 mongoose.Promise = global.Promise;
-mongoose.connect(private.dburi);
+mongoose.connect(appConfig.dburi);
 let db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
-  app.listen(appPort, () => {
-    console.log(`Listening on port ${appPort}`);
+  app.listen(appConfig.appPort, () => {
+    console.log(`Listening on port ${appConfig.appPort}`);
   });
 });
