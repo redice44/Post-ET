@@ -12,18 +12,15 @@ const Assignment = mongoose.model('Assignment');
 // Creates user documents for the learners
 function create (assignmentData, envId) {
   return new Promise((resolve, reject) => {
+    // Build student list from Blackboard
     bbAPI.course.users.getStudents(assignmentData.courseId)
       .then((students) => {
-        // Get all students on course list
+        // Get student information
         Promise.all(students.map((student) => {
           return bbAPI.users.getUser(student.userId);
         }))
           .then((students) => {
             let studentHashes = students.map((student) => {
-              // console.log('hashing...');
-              // console.log(envId);
-              // console.log(assignmentData.courseId);
-              // console.log(student.id);
               return securityUtil.hashUser({
                 envId: envId,
                 courseId: assignmentData.courseId,
@@ -32,11 +29,10 @@ function create (assignmentData, envId) {
               });
             });
 
-            console.log('student hashes', studentHashes);
             // Add learner list to assignment
             assignmentData.learners = studentHashes;
 
-            // Update student list 
+            // Create or update students
             Promise.all(students.map((student, i) => {
               return userAPI.getOrCreate({ ID: studentHashes[i] }, {
                 ID: studentHashes[i],
@@ -46,96 +42,24 @@ function create (assignmentData, envId) {
               });
             }))
               .then((students) => {
-                // Get Gradebook Columns
                 if (assignmentData.graded) {
-                  assignmentData.graded = {};
-                  assignmentData.graded.maxPoints = assignmentData.maxPoints;
-                  delete assignmentData.maxPoints;
-
-                  let columnData = {
-                    "externalId": assignmentData.name,
-                    "name": assignmentData.name,
-                    // "description": "string",
-                    // "externalGrade": true,
-                    "score": {
-                      "possible": assignmentData.graded.maxPoints,
-                      // "decimalPlaces": 0
-                    },
-                    "availability": {
-                      "available": "Yes"
-                    },
-                    "grading": {
-                      "type": "Manual",
-                      // "due": "2017-06-05T19:34:25.125Z",
-                      // "attemptsAllowed": 0,
-                      // "scoringModel": "Last",
-                      "anonymousGrading": {
-                        "type": "None",
-                        // "releaseAfter": "2017-06-05T19:34:25.125Z"
-                      }
-                    }
-                  };
-
-                  console.log('column data');
-                  console.log(columnData);
-
                   // Create grade column for assignment
                   // We do this because we cannot edit content items that are
                   // graded if they were created in BB that way.
                   // So we create our own column and assocations.
-                  bbAPI.course.grades.createColumn(assignmentData.courseId, columnData)
-                    .then((column) => {
-                      console.log('column created')
-                      console.log(column);
-                      assignmentData.graded.columnId = column.id;
-                      getOrCreate({ ID: assignmentData.ID }, assignmentData)
-                        .then((as) => {
-                          // update content
-                          let contentData = {
-                            title: as.name,
-                            // body: `<iframe src='http://localhost/api/1.0/assignment/${as.ID}'></iframe>`
-                          };
-
-                          // Update content item in BB.
-                          bbAPI.course.content.update(as.courseId, as.contentId, contentData)
-                            .then(() => {
-                              return resolve(as);
-                            })
-                            .catch((err) => {
-                              console.log(err);
-                              return reject(err);
-                            });
-                        })
-                        .catch((err) => {
-                          console.log(err);
-                          return reject(err);
-                        });
+                  __graded__(assignmentData)
+                    .then((as) => {
+                      return resolve(as);
                     })
                     .catch((err) => {
                       return reject(err);
-                    });
+                    })
                 } else {
-                  getOrCreate({ ID: assignmentData.ID }, assignmentData)
+                  __create__(assignmentData)
                     .then((as) => {
-                      // update content
-                      let contentData = {
-                        title: as.name,
-                        // body: `<p><iframe width="320" height="240" src="http://localhost/api/1.0/assignment/${as.ID}"></iframe></p>`
-                        // body: `http://localhost/api/1.0/assignment/${as.ID}`
-                        body: as.description
-                      };
-                      console.log('content data', contentData);
-                      bbAPI.course.content.update(as.courseId, as.contentId, contentData)
-                        .then(() => {
-                          return resolve(as);
-                        })
-                        .catch((err) => {
-                          console.log(err);
-                          return reject(err);
-                        });
+                      return resolve(as);
                     })
                     .catch((err) => {
-                      console.log(err);
                       return reject(err);
                     });
                 }
@@ -167,7 +91,6 @@ function get (assignmentHash) {
       .then((assignment) => {
         userAPI.find({ ID: { $in: assignment.learners }})
           .then((learners) => {
-            // console.log('learners are...', learners);
             assignment = assignment.toObject();
 
             assignment.learners = [];
@@ -191,7 +114,7 @@ function get (assignmentHash) {
             });
 
             if (assignment.graded && assignment.graded.columnId) {
-              getGrades(assignment.courseId, assignment.graded.columnId)
+              __getGrades__(assignment.courseId, assignment.graded.columnId)
                 .then((grades) => {
                   grades.results.forEach((grade) => {
                     assignment.learners.forEach((learner) => {
@@ -224,20 +147,11 @@ function get (assignmentHash) {
   });
 }
 
-function getOrCreate (q, assignmentData) {
-  const options = {
-    new: true,
-    upsert: true
-  };
-
-  return Assignment.findOneAndUpdate(q, { $set: assignmentData }, options).exec();
-}
-
-// Only allow name, description, and learners to be updated.
 function update (assignmentHash, assignmentData) {
   return new Promise((resolve, reject) => {
     findOne({ ID: assignmentHash })
       .then((assignment) => {
+        // Only the following properties are being allowed to be updated
         assignment.name = assignmentData.name || assignment.name;
         assignment.description = assignmentData.description || assignment.description;
         assignment.learners = assignmentData.learners || assignment.learners;
@@ -274,18 +188,6 @@ function update (assignmentHash, assignmentData) {
   });
 }
 
-function getGrades (courseId, columnId) {
-  return new Promise((resolve, reject) => {
-    bbAPI.course.grades.getColumnGrades(courseId, columnId)
-      .then((grades) => {
-        return resolve(grades);
-      })
-      .catch((err) => {
-        return reject(err);
-      });
-  });
-}
-
 function updateGrade (asId, userId, grade) {
   return new Promise((resolve, reject) => {
     findOne({ ID: asId })
@@ -304,10 +206,105 @@ function updateGrade (asId, userId, grade) {
   });
 }
 
+function __create__ (assignmentData) {
+  return new Promise((resolve, reject) => {
+    __getOrCreate__({ ID: assignmentData.ID }, assignmentData)
+      .then((as) => {
+        // update content
+        let contentData = {
+          title: as.name,
+          // body: `<iframe src='http://localhost/api/1.0/assignment/${as.ID}'></iframe>`
+        };
+
+        // Update content item in BB.
+        bbAPI.course.content.update(as.courseId, as.contentId, contentData)
+          .then(() => {
+            return resolve(as);
+          })
+          .catch((err) => {
+            console.log(err);
+            return reject(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+        return reject(err);
+      });
+  });
+}
+
+function __getGrades__ (courseId, columnId) {
+  return new Promise((resolve, reject) => {
+    bbAPI.course.grades.getColumnGrades(courseId, columnId)
+      .then((grades) => {
+        return resolve(grades);
+      })
+      .catch((err) => {
+        return reject(err);
+      });
+  });
+}
+
+function __getOrCreate__ (q, assignmentData) {
+  const options = {
+    new: true,
+    upsert: true
+  };
+
+  return Assignment.findOneAndUpdate(q, { $set: assignmentData }, options).exec();
+}
+
+function __graded__ (assignmentData) {
+  return new Promise((resolve, reject) => {
+    assignmentData.graded = {};
+    assignmentData.graded.maxPoints = assignmentData.maxPoints;
+    delete assignmentData.maxPoints;
+
+    let columnData = {
+      "externalId": assignmentData.name,
+      "name": assignmentData.name,
+      // "description": "string",
+      // "externalGrade": true,
+      "score": {
+        "possible": assignmentData.graded.maxPoints,
+        // "decimalPlaces": 0
+      },
+      "availability": {
+        "available": "Yes"
+      },
+      "grading": {
+        "type": "Manual",
+        // "due": "2017-06-05T19:34:25.125Z",
+        // "attemptsAllowed": 0,
+        // "scoringModel": "Last",
+        "anonymousGrading": {
+          "type": "None",
+          // "releaseAfter": "2017-06-05T19:34:25.125Z"
+        }
+      }
+    };
+
+    bbAPI.course.grades.createColumn(assignmentData.courseId, columnData)
+      .then((column) => {
+        assignmentData.graded.columnId = column.id;
+
+        // Create Assignment
+        __create__(assignmentData)
+          .then((as) => {
+            return resolve(as);
+          })
+          .catch((err) => {
+            return reject(err);
+          });
+      })
+      .catch((err) => {
+        return reject(err);
+      });
+  });
+}
+
 exports.create = create;
 exports.findOne = findOne;
 exports.get = get;
-exports.getGrades = getGrades;
-exports.getOrCreate = getOrCreate;
 exports.update = update;
 exports.updateGrade = updateGrade;

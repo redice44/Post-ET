@@ -6,15 +6,17 @@ const assignmentAPI = require('./index');
 const bbAPI = require('../../bb');
 const userAPI = require('../user');
 
+/*
+  Renders a display grid for the assignment. Displays all students'
+  post to the assignment in a randomized order.
+*/
 router.get('/:asId', (req, res) => {
-  console.log('asid', req.params.asId);
   assignmentAPI.get(req.params.asId)
     .then((assignment) => {
       let locals = {
         assignment: assignment
       };
 
-      console.log('learners', assignment.learners);
       let posts = assignment.learners.map((learner) => {
         if (learner.post) {
           let p = learner.post;
@@ -27,13 +29,6 @@ router.get('/:asId', (req, res) => {
       posts = posts.filter((post) => {
         return !!post;
       });
-
-      console.log('posts', posts);
-
-      // while (posts.length > 9) {
-      //   // Remove a random post
-      //   posts.splice(Math.floor(Math.random() * posts.length), 1);
-      // }
 
       let placeHolders = [
         {
@@ -73,45 +68,23 @@ router.get('/:asId', (req, res) => {
         }
       ];
 
-      while (posts.length < 100) {
-        // Populate with placeholder image
-        posts.push(placeHolders[Math.floor(Math.random() * placeHolders.length)]);
+      locals.posts = [];
+      while (posts.length > 0) {
+        // Randomly splices an element and pushes it to locals.post
+        locals.posts.push(posts.splice(Math.floor(Math.random() * posts.length), 1).pop());
       }
 
-      locals.posts = posts;
       return res.render('grid', locals);
     })
     .catch((err) => {
       console.log(err);
       return res.status(500).send(err);
     });
-  // assignmentAPI.findOne({ ID: req.params.asId })
-  //   .then((assignment) => {
-  //     // return some display page I guess
-  //     bbAPI.course.grades.getColumnGrades(assignment.courseId, assignment.graded.columnId)
-  //       .then((grades) => {
-  //         console.log(grades);
-  //         return res.send(grades);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //         return res.status(500).send(err);
-  //       });
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //     return res.status(500).send(err);
-  //   });
 });
 
 // Creates new assignment
 router.post('/', (req, res) => {
-  console.log('creating new assignment', req.body);
-
-  // Date is sent mm-dd-yyyy
-  let dueDate = req.body.dueDate.split('-');
-  dueDate = new Date(`${dueDate[2]}-${dueDate[0]}-${dueDate[1]}T23:59:00`);
-  dueDate.setHours(dueDate.getHours() + Math.floor(dueDate.getTimezoneOffset() / 60));
+  let dueDate = getDate(req.body.dueDate);
 
   let assignmentData = {
     ID: req.body.asId,
@@ -131,12 +104,8 @@ router.post('/', (req, res) => {
     }
   }
 
-  console.log('assignment data');
-  console.log(assignmentData);
-
   assignmentAPI.create(assignmentData, req.session.envId)
     .then((assignment) => {
-      // redirect for now
       // update blackboard content item
       return res.redirect(`/instructor/as/${assignment.ID}/`);
     })
@@ -149,10 +118,7 @@ router.post('/', (req, res) => {
 // Updates an assignment
 // update to put. Using post for now since I'm testing with forms.
 router.post('/:asId', (req, res) => {
-  // Date is sent mm-dd-yyyy
-  let dueDate = req.body.dueDate.split('-');
-  dueDate = new Date(`${dueDate[2]}-${dueDate[0]}-${dueDate[1]}T23:59:00`);
-  dueDate.setHours(dueDate.getHours() + Math.floor(dueDate.getTimezoneOffset() / 60));
+  let dueDate = getDate(req.body.dueDate);
 
   let assignmentData = {
     name: req.body.name,
@@ -192,7 +158,6 @@ router.post('/:asId/learner/:userId', (req, res) => {
     grade.feedback = req.body.feedback;
   }
 
-  console.log('grade', grade);
   userAPI.grade(req.params.userId, req.params.asId, grade)
     .then(() => {
       assignmentAPI.updateGrade(req.params.asId, req.body.lId, grade)
@@ -209,5 +174,14 @@ router.post('/:asId/learner/:userId', (req, res) => {
       return res.status(500).send(err);
     });
 });
+
+function getDate (date) {
+  // date is sent mm-dd-yyyy
+  let dueDate = date.split('-');
+  dueDate = new Date(`${dueDate[2]}-${dueDate[0]}-${dueDate[1]}T23:59:00`);
+  dueDate.setHours(dueDate.getHours() + Math.floor(dueDate.getTimezoneOffset() / 60));
+
+  return dueDate;
+}
 
 module.exports = router;
