@@ -4,19 +4,12 @@ const path = require('path');
 
 const securityUtil = require('../../util/security');
 const validateLTI = require('./validateLTI');
-const getUserRole = require('./userRole');
 
 const assignmentAPI = require('../api/1.0/assignment');
 const userAPI = require('../api/1.0/user');
 
-router.post('/launch', (req, res) => {
-  if (!validateLTI(req.body)) {
-    return res.status(400).send('Bad Request');
-  }
-
-  // console.log(req.body);
-
-  let role = getUserRole(req.body);
+router.post('/launch', validateLTI, (req, res) => {
+  let role = __getUserRole__(req.body);
   req.session.envId = req.body.tool_consumer_instance_guid;
   req.session.courseId = req.body.context_label;
   req.session.contentId = req.body.resource_link_id;
@@ -24,17 +17,11 @@ router.post('/launch', (req, res) => {
   req.session.userId = req.body.lis_person_sourcedid;
   // Hash Environment ID, Course ID, User ID
   const userHash = securityUtil.hashUser(req.session);
-  console.log('user hash', userHash);
-  // Hash Environment ID, Course ID, Content ID
   const assignmentHash = securityUtil.hashAssignment(req.session);
-  // req.session.assignmentId = assignmentHash;
-  // req.session.userId = userHash;
   req.session.role = role;
-  let redirectUrl = '';
 
   switch (role) {
     case 'Instructor':
-      redirectUrl = '/instructor';
       let userData = {
         ID: userHash,
         role: role,
@@ -47,12 +34,9 @@ router.post('/launch', (req, res) => {
           assignmentAPI.findOne({ ID: assignmentHash})
             .then((assignment) => {
               if (!assignment) {
-                console.log('asId', assignmentHash);
-                console.log(`${redirectUrl}/as/${assignmentHash}/create`);
-                return res.redirect(`${redirectUrl}/as/${assignmentHash}/create`);
+                return res.redirect(`/instructor/as/${assignmentHash}/create`);
               }
-              console.log('assignment', assignment);
-              return res.redirect(`${redirectUrl}/as/${assignmentHash}`);
+              return res.redirect(`/instructor/as/${assignmentHash}`);
             })
             .catch((err) => {
               console.log('error', err);
@@ -65,15 +49,20 @@ router.post('/launch', (req, res) => {
         });
       break;
     case 'Learner':
-      redirectUrl = '/learner';
       req.session.asId = assignmentHash;
       req.session.userId = userHash;
-      console.log('session', req.session);
-      return res.redirect(`${redirectUrl}`);
+      return res.redirect(`/learner`);
       break;
     default:
       return res.send(`Unsupported role: ${role}`);
   }
 });
+
+function __getUserRole__ (params) {
+  let role = params.roles.split(':');
+  role = role[role.length - 1].split('/');
+  role = role[role.length - 1]
+  return role;
+}
 
 module.exports = router;
