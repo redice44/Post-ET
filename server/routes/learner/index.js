@@ -5,7 +5,10 @@ const router = express.Router();
 const path = require('path');
 
 const assignmentAPI = require('../api/1.0/assignment');
+const roleAuth = require('../api/1.0/auth/role');
 const instagramAPI = require('../api/instagram');
+
+router.all('*', roleAuth.isLearner);
 
 router.get('/', (req, res) => {
   console.log(`Session ID: ${req.session.userId}`);
