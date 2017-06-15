@@ -1,0 +1,16 @@
+if learner.post
+  section(class='post ' + learner.state + ' ' + (learner.state === 'graded' ? 'hide' : 'show'), style='width: ' + learner.post.width + 'px')
+    header
+      p= learner.name
+      if learner.state === 'graded'
+        include ./icons/fullStar
+    if !post
+      - post = learner.post
+      include ./post/post
+      - post = null
+    include ./as/modify/grade
+else
+  section(class='post ' + learner.state, style='width: 640px')
+    header
+      p= learner.name   
+      include ./icons/emptyStar

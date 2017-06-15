@@ -241,6 +241,11 @@ function update (assignmentHash, assignmentData) {
         assignment.name = assignmentData.name || assignment.name;
         assignment.description = assignmentData.description || assignment.description;
         assignment.learners = assignmentData.learners || assignment.learners;
+        assignment.dueDate = assignmentData.dueDate || assignment.dueDate;
+
+        if (assignmentData.graded) {
+          assignment.graded.maxPoints = assignmentData.maxPoints || assignment.graded.maxPoints;
+        }
 
         assignment.save()
           .then((as) => {

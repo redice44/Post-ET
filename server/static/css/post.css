@@ -11,6 +11,13 @@
   border: 1px solid black;
 }
 
+.display .post {
+  display: flex; 
+  justify-content: center; 
+  flex-direction:column; 
+  align-items: center;
+}
+
 .post > header {
   /*background-color: #536774;*/
   /*background-color: #4c68d7;*/

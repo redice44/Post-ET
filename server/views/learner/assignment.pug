@@ -5,5 +5,9 @@ block styles
 
 block content
   #feed
-    include ../assignment
-    include ../post
+    section.post
+      include ../includes/assignment
+      if !post && assignment.learner.post
+        - post = assignment.learner.post
+      include ../includes/post/post
+      include ../includes/as/submit

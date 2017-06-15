@@ -53,7 +53,7 @@ router.get('/as/:asId', (req, res) => {
 
       console.log('assignment', assignment);
       
-      return res.render('instructor/show', locals);
+      return res.render('instructor/grade', locals);
     })
     .catch((err) => {
       console.log(err);

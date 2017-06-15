@@ -1,51 +1,12 @@
-doctype html
-html
-  head
-    link(rel='stylesheet', href='/css/core.css', type='text/css')
-    link(rel='stylesheet', href='/css/post.css', type='text/css')
-    link(rel='stylesheet', href='/lib/css/datepicker.min.css', type='text/css')
+extends ../layout
 
-    //- script(src='/lib/js/jquery-3.2.1.min.js')
-    //- script(src='/lib/js/datepicker.min.js')
-    //- script(src='/js/datepicker.js')
-  body
-    #feed
-      section.post
-        header
-          p=assignment.name
-        //- Only allow name change if it isn't a graded assignment. Graded assignments cannot change name. 
-        unless assignment.graded
-          article.grade
-            p.heading Assignment Name:
-            form#asform(method=httpVerb, action=endpoint)
-              input(type='hidden', name='asId', value=assignment.ID)
-              input(type='text', name='name', value=assignment.name)
-        article.grade
-          p.heading Assignment Description
-          textarea(form='asform', name='description')= (assignment.description ? assignment.description : '')
-        if assignment.graded
-          article.grade
-            p.heading Graded Assignment
-            p= 'Possible Points: ' + assignment.graded.maxPoints
-            input(type='hidden', name='graded', value='on')
-          article.grade(style='display: flex;')
-            div
-              p.heading Update Possible Points
-              input(form='asform' type='number', name='maxPoints', min=0, value=assignment.graded.maxPoints)
-            div
-              p.heading Due Date:
-              input(form='asform', data-toggle='datepicker' name='dueDate')
-        else
-          article.grade
-            p.heading Graded Assignment: 
-              input(form='asform', type='checkbox', name='graded')
-          article.grade(style='display: flex;')
-            div(style='flex-grow: 1;')
-              p.heading Possible Points:
-              input(form='asform', type='number', name='maxPoints', min=0, value=0)
-            div
-              p.heading Due Date:
-              input(form='asform', data-toggle='datepicker' name='dueDate')
-        footer
-          input(form='asform', type='submit', value= action + ' Assignment')
+block styles
+  link(rel='stylesheet', href='/css/post.css', type='text/css')
+  link(rel='stylesheet', href='/lib/css/datepicker.min.css', type='text/css')
+
+block content
+  #feed
+    include ../includes/editAssignment
+
+block scripts
   script(src='/js/datepicker.js')

@@ -10,7 +10,9 @@ router.get('/:asId', (req, res) => {
   console.log('asid', req.params.asId);
   assignmentAPI.get(req.params.asId)
     .then((assignment) => {
-      let locals = {};
+      let locals = {
+        assignment: assignment
+      };
 
       console.log('learners', assignment.learners);
       let posts = assignment.learners.map((learner) => {
@@ -147,10 +149,25 @@ router.post('/', (req, res) => {
 // Updates an assignment
 // update to put. Using post for now since I'm testing with forms.
 router.post('/:asId', (req, res) => {
+  // Date is sent mm-dd-yyyy
+  let dueDate = req.body.dueDate.split('-');
+  dueDate = new Date(`${dueDate[2]}-${dueDate[0]}-${dueDate[1]}T23:59:00`);
+  dueDate.setHours(dueDate.getHours() + Math.floor(dueDate.getTimezoneOffset() / 60));
+
   let assignmentData = {
     name: req.body.name,
-    description: req.body.description
+    description: req.body.description,
+    dueDate: dueDate
   };
+
+  if (req.body.graded) {
+    assignmentData.graded = true;
+    if (req.body.maxPoints) {
+      assignmentData.maxPoints = req.body.maxPoints;
+    } else {
+      assignmentData.maxPoints = 0;
+    }
+  }
 
   assignmentAPI.update(req.params.asId, assignmentData)
     .then((assignment) => {

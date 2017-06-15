@@ -1,0 +1,17 @@
+if assignment.graded
+  article.grade
+    p.heading Assignment Grade
+    form(id=learner.ID, action='/api/1.0/assignment/' + assignment.ID + '/learner/' + learner.ID, method='POST')
+      input(type='hidden', name='lId', value=learner.envUserId)
+      if learner.grade
+        input(type='number', name='grade', placeholder='Grade', min=0, max=assignment.graded.maxPoints, value=learner.grade.score)
+      else
+        input(type='number', name='grade', placeholder='Grade', min=0, max=assignment.graded.maxPoints)
+  article.grade
+    p.heading Assignment Feedback
+    if learner.grade
+      textarea(form=learner.ID, name='feedback')= learner.grade.feedback
+    else
+      textarea(form=learner.ID, name='feedback')
+  footer
+    input(form=learner.ID, type='submit', value='Submit Grade')

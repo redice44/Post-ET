@@ -1,0 +1,18 @@
+extends ../layout
+
+block styles
+  link(rel='stylesheet', href='/css/post.css', type='text/css')
+  link(rel='stylesheet', href='/css/gradeLegend.css', type='text/css')
+
+block content
+  p
+    a(href='/instructor/as/' + assignment.ID + '/edit') Edit
+  #feed
+    section.post
+      include ../includes/assignment
+    each learner in assignment.learners
+      include ../includes/submission
+    include ../includes/legend
+
+block scripts
+  script(src='/js/collapsePost.js')

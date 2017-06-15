@@ -3,7 +3,7 @@ header
     if assignment.graded
       span.points Score:
         br
-        if assignment.learner.grade
+        if assignment.learner && assignment.learner.grade
           span= assignment.learner.grade.score + '/' + assignment.graded.maxPoints
         else
           span= '/' + assignment.graded.maxPoints

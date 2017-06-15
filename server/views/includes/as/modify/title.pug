@@ -1,0 +1,5 @@
+unless assignment.graded
+  article.grade
+    p.heading Assignment Name:
+    input(form='asform', type='hidden', name='asId', value=assignment.ID)
+    input(form='asform', type='text', name='name', value=assignment.name)

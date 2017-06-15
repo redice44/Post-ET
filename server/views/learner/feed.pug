@@ -5,6 +5,9 @@ block styles
 
 block content
   #feed
-    include ../assignment
+    section.post
+      include ../includes/assignment
     each post in media
-      include ../post
+      section.post
+        include ../includes/post/post
+        include ../includes/post/submit/submit

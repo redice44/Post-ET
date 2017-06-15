@@ -1,35 +1,15 @@
 doctype html
 html
   head
-    //- link(rel='stylesheet', href='/css/grid.css', type='text/css')
-    //- link(rel='stylesheet', href='/css/grid2.css', type='text/css')
-    link(rel='stylesheet', href='/css/post.css', type='text/css')
-    link(rel='stylesheet', href='/lib/css/slick.css', type='text/css')
-    link(rel='stylesheet', href='/lib/css/slick-theme.css', type='text/css')
+    link(rel='stylesheet', href='/css/grid.css', type='text/css')
   body
     #grid
-      .slider-for
-        each post in posts
-          //- .post
-          .post(style='height: ' + (post.height * 0.5) + 'px; width: ' + (post.width * 0.5) + 'px; display: flex; justify-content: center; flex-direction:column; align-items: center;')
-            if post.type === 'image'
-              img(src=post.url, style='height: ' + (post.height * 0.5) + 'px; width: ' + (post.width * 0.5) + 'px; display: block;')
-            else
-              video(src=post.url, style='height: ' + (post.height * 0.5) + 'px; width: ' + (post.width * 0.5) + 'px; display: block;')
-            p= post.name
-            //- .cover(style='height: ' + (post.height * 0.5) + 'px; width: ' + (post.width * 0.5) + 'px; top: ' + (post.height * -0.5) + 'px;')
-                p= post.name
-
-    script(src='/js/imageDisplay.js')
-    //- #grid
       each post in posts
-        //- .post(style='height: ' + (post.height * 0.3) + 'px; width: ' + (post.width * 0.3) + 'px;')
         .post
           div(style='height: ' + (post.height * 0.3) + 'px; width: ' + (post.width * 0.3) + 'px;')
             if post.type === 'image'
               img(src=post.url, style='height: ' + (post.height * 0.3) + 'px; width: ' + (post.width * 0.3) + 'px;',)
             else
               video(src=post.url, style='height: ' + (post.height * 0.3) + 'px; width: ' + (post.width * 0.3) + 'px;')
-              //- video(src=post.url, style='height: ' + (post.height * 0.3) + 'px; width: ' + (post.width * 0.3) + 'px;', controls, controlsList='nodownload')
             .cover(style='height: ' + (post.height * 0.3) + 'px; width: ' + (post.width * 0.3) + 'px; top: ' + (post.height * -0.3) + 'px;')
               p= post.name

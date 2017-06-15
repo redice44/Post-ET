@@ -10341,9 +10341,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-__WEBPACK_IMPORTED_MODULE_0_jquery___default()('[data-toggle="datepicker"]').datepicker({
-  format: 'mm-dd-yyyy'
-});
+console.log(__WEBPACK_IMPORTED_MODULE_0_jquery___default()('[data-toggle="datepicker"]').data('date'));
+
+let options = {};
+let dueDate = __WEBPACK_IMPORTED_MODULE_0_jquery___default()('[data-toggle="datepicker"]').data('date');
+options.format = 'mm-dd-yyyy';
+
+if (dueDate) {
+  options.date = new Date(dueDate);
+}
+
+__WEBPACK_IMPORTED_MODULE_0_jquery___default()('[data-toggle="datepicker"]').datepicker(options);
+__WEBPACK_IMPORTED_MODULE_0_jquery___default()('[data-toggle="datepicker"]').datepicker('pick');
 
 /***/ }),
 

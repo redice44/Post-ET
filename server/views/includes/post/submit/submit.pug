@@ -1,0 +1,11 @@
+footer
+  form(action='/api/1.0/user/' + userId + '/as/' + asId, method='POST')
+    input(type='hidden', name='url', value=post.url)
+    input(type='hidden', name='type', value=post.type)
+    input(type='hidden', name='width', value=post.width)
+    input(type='hidden', name='height', value=post.height)
+    input(type='hidden', name='postLink', value=post.postLink)
+    input(type='hidden', name='mediaId', value=post.id)
+    input(type='hidden', name='userId', value=userId)
+    input(type='hidden', name='description', value=post.description)
+    input(type='submit', value='Submit Post')
