@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Matt Thomson <red.cataclysm@gmail.com>",
-  "license": "GPL-3.0",
+  "license": "CC-BY-4.0",
   "dependencies": {
     "@fengyuanchen/datepicker": "github:fengyuanchen/datepicker",
     "body-parser": "^1.17.2",

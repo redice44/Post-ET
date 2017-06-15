@@ -10338,6 +10338,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__fengyuanchen_datepicker__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__fengyuanchen_datepicker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__fengyuanchen_datepicker__);
+/*
+ * Author: Matt Thomson <red.cataclysm@gmail.com>
+ *
+ * This work is licensed under the Creative Commons Attribution 4.0 
+ * International License. To view a copy of this license, 
+ * visit http://creativecommons.org/licenses/by/4.0/ or send a letter 
+ * to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+*/
+
 
 
 
