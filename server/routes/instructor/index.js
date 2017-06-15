@@ -3,7 +3,6 @@ const router = express.Router();
 const path = require('path');
 
 const assignmentAPI = require('../api/1.0/assignment');
-const userAPI = require('../api/1.0/user');
 const bbAPI = require('../api/bb');
 const roleAuth = require('../api/1.0/auth/role');
 const securityUtil = require('../../util/security');

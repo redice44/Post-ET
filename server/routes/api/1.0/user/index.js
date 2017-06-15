@@ -3,17 +3,8 @@ const mongoose = require('mongoose');
 /* Model */
 const User = mongoose.model('User');
 
-function findOne (q) {
-  return User.findOne(q).exec();
-}
-
 function find (q) {
   return User.find(q).exec();
-}
-
-function create (userData) {
-  const user = new User(userData);
-  return user.save();
 }
 
 function getOrCreate (q, userData) {
@@ -25,21 +16,9 @@ function getOrCreate (q, userData) {
   return User.findOneAndUpdate(q, { $set: userData }, options).exec();
 }
 
-function updateUsers (queries, users) {
-  console.log('Updating users');
-  console.log(queries);
-  console.log(users);
-
-  let promises = users.map((user, i) => {
-    return getOrCreate(queries[i], user);
-  });
-
-  return Promise.all(promises);
-}
-
 function submit (userId, asId, submission, grade) {
   return new Promise((resolve, reject) => {
-    findOne({ ID: userId })
+    __findOne__({ ID: userId })
       .then((user) => {
         let sub = {
           assignment: asId,
@@ -52,6 +31,7 @@ function submit (userId, asId, submission, grade) {
         if (!user.submissions) {
           user.submissions = [sub];
         } else {
+          // Find the assignment to submit to
           let index = user.submissions.reduce((acc, submission, i) => {
             if (acc < 0) {
               if (submission.assignment === asId) {
@@ -63,8 +43,10 @@ function submit (userId, asId, submission, grade) {
           }, -1);
 
           if (index < 0) {
+            // New assignment submission
             user.submissions.push(sub);
           } else {
+            // Updating submission
             user.submissions[index].post = submission;
             if (grade) {
               user.submissions[index].grade = grade;
@@ -88,7 +70,7 @@ function submit (userId, asId, submission, grade) {
 
 function grade (userId, asId, grade) {
   return new Promise((resolve, reject) => {
-    findOne({ ID: userId })
+    __findOne__({ ID: userId })
       .then((user) => {
         if (!user.submissions) {
           return reject('Attempting to grade a submission that does not exist.');
@@ -106,7 +88,6 @@ function grade (userId, asId, grade) {
           if (index < 0) {
             return reject('Attempting to grade a submission that does not exist.');
           } else {
-            // user.submissions[index].post = submission;
             if (grade) {
               user.submissions[index].grade = grade;
             } else {
@@ -129,10 +110,11 @@ function grade (userId, asId, grade) {
   });
 }
 
-exports.findOne = findOne;
-exports.find = find;
-exports.create = create;
+function __findOne__ (q) {
+  return User.findOne(q).exec();
+}
+
 exports.getOrCreate = getOrCreate;
 exports.grade = grade;
-exports.updateUsers = updateUsers;
 exports.submit = submit;
+exports.find = find;
