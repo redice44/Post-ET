@@ -49,8 +49,6 @@ router.get('/as/:asId', (req, res) => {
             return 0;
         }
       });
-
-      console.log('assignment', assignment);
       
       return res.render('instructor/grade', locals);
     })
