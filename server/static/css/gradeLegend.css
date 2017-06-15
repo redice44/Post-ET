@@ -3,7 +3,7 @@
   top: 0;
   right: 0;
   margin: 20px;
-  border: 1px solid black;
+  border: 1px solid #000000;
   border-top: 0;
 }
 
@@ -15,24 +15,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-top: 1px solid black;
-  background-color: #eceef9;
+  border-top: 1px solid #000000;
+  background-color: #ECEEF9;
 }
-/*
-#legend > ul > li:first-child {
-  background-color: #c9ceee;
-  border-bottom: 1px solid black;
-}
-*/
+
 #legend > ul > li > div {
   padding: 5px 10px;
 }
-/*
-#legend > ul > li:first-child > div {
-  padding: 10px;
-  font-size: 20px;
-}
-*/
+
 #legend .key {
   width: 50px;
   text-align: center;
@@ -40,9 +30,9 @@
 }
 
 #legend .icon {
-  background-color: #1f3489;
+  background-color: #1F3489;
 }
 
 #legend svg {
-  fill: white;
+  fill: #FFFFFF;
 }

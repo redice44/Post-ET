@@ -19,8 +19,6 @@
 }
 
 .post > header {
-  /*background-color: #536774;*/
-  /*background-color: #4c68d7;*/
   background-color: #1f3489;
   color: #fff;
   padding: 10px 10px 10px 20px;
@@ -36,7 +34,6 @@
   float: right;
   background-color: #eceef9;
   border: 1px solid black;
-  /*border-radius: 5px;*/
   padding: 0 5px;
   font-size: 10px;
   line-height: 25px;
@@ -47,13 +44,8 @@
 
 .post > header .points {
   float: right;
-  /*background-color: #ddd;*/
-  /*border: 1px solid black;*/
-  /*border-radius: 5px;*/
-  /*padding: 0 5px;*/
   font-size: 15px;
   line-height: 15px;
-  /*height: 25px;*/
   color: white;
   text-align: center;
 }
@@ -82,21 +74,11 @@
   position: relative;
   top: -42px;
   left: 575px;
-  /*background-color: #2e328e;*/
-  /*border: 1px solid black;*/
   fill: white;
   padding: 10px;
   width: 30px;
   height: 30px;
 
-}
-
-.post.unsubmitted > header svg {
-  /*fill: red;*/
-}
-
-.post.graded > header svg {
-  /*fill: green;*/
 }
 
 /* Media post: Image or Video content */
@@ -105,25 +87,11 @@
   padding: 0 !important;
 }
 
-/* Media Description */
-
-.media-description {
-  /*padding: 20px;*/
-}
-
-/* Assignments */
-
-.assignment-description {
-  /*padding: 20px;*/
-}
-
 /* Grading */
 
 .grade {
   border-top: 1px solid black;
-  /*background-color: #c5c5c5 !important;*/
-  background-color: #eceef9 !important;
-  /*padding: 20px;*/
+  background-color: #ECEEF9 !important;
 }
 
 .grade input[name='grade'] {
@@ -158,28 +126,28 @@
 /* Submit */
 
 .post > footer input[type='submit'] {
-  background-color: #2308a7;
+  background-color: #2308A7;
   border: 0;
   height: 50px;
   width: 100%;
   line-height: 30px;
   font-size: 20px;
-  color: #fff;
+  color: #FFFFFF;
 }
 
 .post > footer input:hover {
-  background-color: #2b0ad0;
+  background-color: #2B0AD0;
   cursor: pointer;
 }
 
 .post > footer a, .post > footer p {
-  background-color: #2308a7;
+  background-color: #2308A7;
   border: 0;
   height: 50px;
   width: 100%;
   line-height: 50px;
   font-size: 20px;
-  color: #fff;
+  color: #FFFFFF;
   display: block;
   text-align: center;
   text-decoration: none;
@@ -194,5 +162,5 @@
 }
 
 .post > footer a:hover {
-  background-color: #2b0ad0;
+  background-color: #2B0AD0;
 }
