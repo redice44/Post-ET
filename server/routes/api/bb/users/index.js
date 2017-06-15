@@ -1,5 +1,4 @@
 const request = require('superagent');
-const private = require('../../../../../private');
 
 const authAPI = require('../auth');
 const domain = 'http://localhost:9876';

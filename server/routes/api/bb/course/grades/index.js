@@ -36,8 +36,6 @@ function deleteColumn (courseId, columnId) {
         console.log(`-> BB [DELETE]: ${domain}${gradesEndpoint}externalId:${courseId}/gradebook/columns/externalId:${columnId}`);
         request.delete(`${domain}${gradesEndpoint}externalId:${courseId}/gradebook/columns/externalId:${columnId}`)
           .set('Authorization', `Bearer ${token}`)
-          // .set('Content-Type', 'application/json')
-          // .send(columnData)
           .end((err, asyncRes) => {
             if (err || asyncRes.status !== 200) {
               return reject(err || asyncRes.status);
