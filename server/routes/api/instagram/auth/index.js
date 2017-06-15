@@ -9,7 +9,6 @@ let redirectUri;
 function authUser (req, res) {
   redirectUri = redirectUriBase + `?asId=${req.session.asId}&userId=${req.session.userId}`
   const instagramAuthUrl = `${instagramDomain}oauth/authorize/?client_id=${private.instaId}&redirect_uri=${redirectUri}&response_type=code&output=embed`;
-  // console.log('session', req.session);
   return res.redirect(instagramAuthUrl);
 }
 
