@@ -25,8 +25,6 @@ function checkLTIRequest (params) {
 }
 
 function isLaunchRequest (params) {
-  console.log('Validating LTI Launch Request');
-
   if (!params.lti_message_type || params.lti_message_type !== 'basic-lti-launch-request') {
     console.log('Missing or Invalid lti_message_type');
     return false;
@@ -52,8 +50,6 @@ function isLaunchRequest (params) {
 }
 
 function isValidLTI (params) {
-  console.log('Validate LTI Reques');
-
   if (!params.oauth_callback || params.oauth_callback !== 'about:blank') {
     console.log('Missing or Invalid oauth_callback');
     return false;
