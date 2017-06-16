@@ -79,7 +79,7 @@
   display: block;
 }
 
-.post > header svg {
+.post > header > svg {
   position: relative;
   top: -42px;
   left: 575px;
@@ -87,7 +87,11 @@
   padding: 10px;
   width: 30px;
   height: 30px;
+}
 
+.post > header a > svg {
+  fill: #eceef9;
+  margin-left: 5px;
 }
 
 /* Media post: Image or Video content */

@@ -7,6 +7,9 @@
 
 header
   p= assignment.name
+    if edit
+      a(href='/instructor/as/' + assignment.ID + '/edit')
+        include ../icons/edit
     if assignment.graded
       span.points Score:
         br
