@@ -23,8 +23,6 @@ function authUser (req, res) {
 
 function getAuthToken (code) {
   const accessTokenUrl = `${instagramDomain}oauth/access_token`;
-  console.log('redirect uri', redirectUri);
-  console.log('code', code);
 
   return new Promise((resolve, reject) => {
     request.post(accessTokenUrl)

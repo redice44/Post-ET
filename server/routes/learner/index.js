@@ -34,7 +34,6 @@ router.get('/', (req, res) => {
         }
       });
       delete assignment.learners;
-      console.log('assignment', assignment);
 
       let locals = {
         assignment: assignment
@@ -111,7 +110,6 @@ router.get('/auth_user', instagramAPI.auth.authUser);
 router.get('/authToken', (req, res) => {
   instagramAPI.auth.getAuthToken(req.query.code)
     .then((result) => {
-      console.log('result', result);
       req.session.access_token = result.access_token;
       req.session.instagram = result.user;
       req.session.userId = result.userId;
