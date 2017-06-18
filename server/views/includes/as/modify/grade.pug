@@ -1,0 +1,24 @@
+//- Author: Matt Thomson <red.cataclysm@gmail.com>
+
+//- This work is licensed under the Creative Commons Attribution 4.0 
+//- International License. To view a copy of this license, 
+//- visit http://creativecommons.org/licenses/by/4.0/ or send a letter 
+//- to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+
+if assignment.graded
+  article.grade
+    p.heading Assignment Grade
+    form(id=learner.ID, action='/api/1.0/assignment/' + assignment.ID + '/learner/' + learner.ID, method='POST')
+      input(type='hidden', name='lId', value=learner.envUserId)
+      if learner.grade
+        input(type='number', name='grade', placeholder='Grade', min=0, max=assignment.graded.maxPoints, value=learner.grade.score)
+      else
+        input(type='number', name='grade', placeholder='Grade', min=0, max=assignment.graded.maxPoints)
+  article.grade
+    p.heading Assignment Feedback
+    if learner.grade
+      textarea(form=learner.ID, name='feedback')= learner.grade.feedback
+    else
+      textarea(form=learner.ID, name='feedback')
+  footer
+    input(form=learner.ID, type='submit', value='Submit Grade')

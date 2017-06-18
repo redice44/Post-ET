@@ -1,0 +1,179 @@
+/*
+ * Author: Matt Thomson <red.cataclysm@gmail.com>
+ *
+ * This work is licensed under the Creative Commons Attribution 4.0 
+ * International License. To view a copy of this license, 
+ * visit http://creativecommons.org/licenses/by/4.0/ or send a letter 
+ * to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+*/
+
+#feed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.post {
+  width: 640px;
+  margin-bottom: 10px;
+  border: 1px solid black;
+}
+
+.display .post {
+  display: flex; 
+  justify-content: center; 
+  flex-direction:column; 
+  align-items: center;
+}
+
+.post > header {
+  background-color: #1f3489;
+  color: #fff;
+  padding: 10px 10px 10px 20px;
+  height: 50px;
+  font-size: 25px;
+  line-height: 30px;
+  box-sizing: border-box;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.post > header .tag {
+  float: right;
+  background-color: #eceef9;
+  border: 1px solid black;
+  padding: 0 5px;
+  font-size: 10px;
+  line-height: 25px;
+  height: 25px;
+  color: red;
+  font-weight: bold;
+}
+
+.post > header .points {
+  float: right;
+  font-size: 15px;
+  line-height: 15px;
+  color: white;
+  text-align: center;
+}
+
+.post > article {
+  background-color: #eceef9;
+  padding: 10px;
+}
+
+.post > article .heading {
+  padding-bottom: 10px;
+  font-weight: bold;
+}
+
+/* Post States */
+
+.post.hide > article, .post.hide > footer {
+  display: none;
+}
+
+.post.show > article, .post.show > footer {
+  display: block;
+}
+
+.post > header > svg {
+  position: relative;
+  top: -42px;
+  left: 575px;
+  fill: white;
+  padding: 10px;
+  width: 30px;
+  height: 30px;
+}
+
+.post > header a > svg {
+  fill: #eceef9;
+  margin-left: 5px;
+}
+
+/* Media post: Image or Video content */
+
+.media {
+  padding: 0 !important;
+}
+
+/* Grading */
+
+.grade {
+  border-top: 1px solid black;
+  background-color: #ECEEF9 !important;
+}
+
+.grade input[name='grade'] {
+  width: 200px;
+  padding: 5px;
+}
+
+.grade input[type='text'], .grade input[type='number'] {
+  width: 200px;
+  padding: 5px;
+}
+
+/* Date Picker */
+
+.grade input[data-toggle='datepicker'] {
+  width: 200px;
+  padding: 5px;
+}
+
+/*.grade textarea[name='feedback'] {*/
+.grade textarea {
+  width: 100%;
+  height: 200px;
+  box-sizing: border-box;
+  padding: 5px;
+}
+
+.grade textarea.embed {
+  height: 75px;
+}
+
+/* Submit */
+
+.post > footer input[type='submit'] {
+  background-color: #2308A7;
+  border: 0;
+  height: 50px;
+  width: 100%;
+  line-height: 30px;
+  font-size: 20px;
+  color: #FFFFFF;
+}
+
+.post > footer input:hover {
+  background-color: #2B0AD0;
+  cursor: pointer;
+}
+
+.post > footer a, .post > footer p {
+  background-color: #2308A7;
+  border: 0;
+  height: 50px;
+  width: 100%;
+  line-height: 50px;
+  font-size: 20px;
+  color: #FFFFFF;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+}
+
+.post > footer p {
+  cursor: default;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.post > footer a:hover {
+  background-color: #2B0AD0;
+}

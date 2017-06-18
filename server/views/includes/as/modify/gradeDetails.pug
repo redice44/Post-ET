@@ -1,0 +1,30 @@
+//- Author: Matt Thomson <red.cataclysm@gmail.com>
+
+//- This work is licensed under the Creative Commons Attribution 4.0 
+//- International License. To view a copy of this license, 
+//- visit http://creativecommons.org/licenses/by/4.0/ or send a letter 
+//- to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+
+if assignment.graded
+  article.grade
+    p.heading Graded Assignment
+    p= 'Possible Points: ' + assignment.graded.maxPoints
+    input(form='asform', type='hidden', name='graded', value='on')
+  article.grade(style='display: flex;')
+    div(style='flex-grow: 1;')
+      p.heading Update Possible Points
+      input(form='asform' type='number', name='maxPoints', min=0, value=assignment.graded.maxPoints)
+    div
+      p.heading Due Date:
+      input(form='asform', data-toggle='datepicker' name='dueDate', data-date= (assignment.dueDate ? assignment.dueDate : ''))
+else
+  article.grade
+    p.heading Graded Assignment: 
+      input(form='asform', type='checkbox', name='graded')
+  article.grade(style='display: flex;')
+    div(style='flex-grow: 1;')
+      p.heading Possible Points:
+      input(form='asform', type='number', name='maxPoints', min=0, value=0)
+    div
+      p.heading Due Date:
+      input(form='asform', data-toggle='datepicker' name='dueDate')

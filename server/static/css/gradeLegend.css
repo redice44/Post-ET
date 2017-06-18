@@ -1,0 +1,47 @@
+/*
+ * Author: Matt Thomson <red.cataclysm@gmail.com>
+ *
+ * This work is licensed under the Creative Commons Attribution 4.0 
+ * International License. To view a copy of this license, 
+ * visit http://creativecommons.org/licenses/by/4.0/ or send a letter 
+ * to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+*/
+
+#legend {
+  position: fixed;
+  top: 0;
+  right: 0;
+  margin: 20px;
+  border: 1px solid #000000;
+  border-top: 0;
+}
+
+#legend > ul {
+  list-style: none;
+}
+
+#legend > ul > li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid #000000;
+  background-color: #ECEEF9;
+}
+
+#legend > ul > li > div {
+  padding: 5px 10px;
+}
+
+#legend .key {
+  width: 50px;
+  text-align: center;
+  font-weight: bold;
+}
+
+#legend .icon {
+  background-color: #1F3489;
+}
+
+#legend svg {
+  fill: #FFFFFF;
+}

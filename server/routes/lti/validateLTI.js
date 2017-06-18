@@ -1,14 +1,30 @@
-const oauthSignature = require('oauth-signature');
+/*
+ * Author: Matt Thomson <red.cataclysm@gmail.com>
+ *
+ * This work is licensed under the Creative Commons Attribution 4.0 
+ * International License. To view a copy of this license, 
+ * visit http://creativecommons.org/licenses/by/4.0/ or send a letter 
+ * to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+*/
 
-function validateLTI (params) {
+const oauthSignature = require('oauth-signature');
+const ltiLaunchUrl = 'http://localhost:14159/lti/launch';
+
+function validateLTI (req, res, next) {
+  if (!checkLTIRequest(req.body)) {
+    return res.status(400).send('Bad Request');
+  }
+
+  next();
+}
+
+function checkLTIRequest (params) {
   return isLaunchRequest(params) &&
          isValidLTI(params) &&
          isValidTimestamp(params.oauth_timestamp);
 }
 
 function isLaunchRequest (params) {
-  console.log('Validating LTI Launch Request');
-
   if (!params.lti_message_type || params.lti_message_type !== 'basic-lti-launch-request') {
     console.log('Missing or Invalid lti_message_type');
     return false;
@@ -30,18 +46,10 @@ function isLaunchRequest (params) {
     return false;
   }
 
-  // console.log('Valid');
-  // console.log(`lti_message_type: ${params.lti_message_type}`);
-  // console.log(`lti_version: ${params.lti_version}`);
-  // console.log(`oauth_consumer_key: ${params.oauth_consumer_key}`);
-  // console.log(`resource_link_id: ${params.resource_link_id}`);
-
   return true;
 }
 
 function isValidLTI (params) {
-  console.log('Validate LTI Reques');
-
   if (!params.oauth_callback || params.oauth_callback !== 'about:blank') {
     console.log('Missing or Invalid oauth_callback');
     return false;
@@ -78,25 +86,16 @@ function isValidLTI (params) {
     return false;
   }
 
+  // TODO: Get secret from DB
   let consumerSecret = 'secret';
-
   let method = 'POST';
-  let url = 'http://www.bb-lti.com/lti/launch';
   let parameters = Object.assign({}, params);
   delete parameters.oauth_signature
-  let sig = oauthSignature.generate(method, url, parameters, consumerSecret, '', { encodeSignature: false });
+  let sig = oauthSignature.generate(method, ltiLaunchUrl, parameters, consumerSecret, '', { encodeSignature: false });
   if (sig !== params.oauth_signature) {
     console.log('Invalid oauth 1.0 signature');
     return false;
   }
-  // console.log(`oauth_callback: ${params.oauth_callback}`);
-  // console.log(`oauth_consumer_key: ${params.oauth_consumer_key}`);
-  // console.log(`oauth_nonce: ${params.oauth_nonce}`);
-  // console.log(`oauth_signature: ${params.oauth_signature}`);
-  // console.log(`oauth_signature_method: ${params.oauth_signature_method}`);
-  // console.log(`oauth_timestamp: ${params.oauth_timestamp}`);
-  // console.log(`oauth_version: ${params.oauth_version}`);
-  // console.log('Valid oauth signature');
 
   return true;
 }
@@ -104,8 +103,6 @@ function isValidLTI (params) {
 function isValidTimestamp (timestamp) {
   const validRange = 60; // Seconds range +/- 
   const diff = Math.abs(timestamp - Math.floor(Date.now() / 1000));
-
-  // console.log(`Difference: ${diff} | Range: ${validRange}`);
 
   return diff <= validRange;
 }
