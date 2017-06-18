@@ -1,4 +1,6 @@
-# Blackboard Hackathon LTI
+# Post-ET 
+
+An Education Technology LTI that integrates into Blackboard Learn's REST API that provides an integrated solution for Social Media assignments using Instagram. 
 
 ### Requirements
 
@@ -14,8 +16,7 @@
 Clone project.
 
 ```shell
-$ git clone https://github.com/redice44/BB-Hackathon.git
-$ cd BB-Hackathon
+$ git clone https://github.com/redice44/Post-ET.git
 ```
 
 Install dependencies
